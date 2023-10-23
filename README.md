@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/Manao-Tech/malama-honua/blob/main/Manao_updated.png" alt="team-logo" width="300"/>
+  <img src="https://github.com/Manao-Tech/malama-honua/blob/main/Manao_TeamLogo.png" alt="team-logo" width="300"/>
   <img src="https://github.com/Manao-Tech/malama-honua/blob/main/MalamaHonua_Piko.png" alt="malama-honua-logo" width="300"/>
 </p>
 
