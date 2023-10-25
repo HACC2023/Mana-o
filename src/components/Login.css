@@ -1,0 +1,35 @@
+.login{
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .card{
+        text-align: center;
+        & img {
+            display: block;
+            margin: 0 auto;
+        }
+        & form {
+            display: flex;
+            flex-direction: column;
+            gap: 10 px;
+        }
+        & input{
+            border: 2px solid lightgrey;
+            border-radius: 5 px;
+            padding: 10px 10px;
+            display: block;
+            margin: 0 auto;
+            width: 80%;
+        }
+        & button{
+            display: block;
+            margin: 0 auto;
+            width: 80%;
+            background-color: #3F1FFF;
+            color: #FFFFFF;
+        }
+
+    }
+
+}
