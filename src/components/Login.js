@@ -4,8 +4,8 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import {Link} from 'react-router-dom';
-import {Container} from 'react-bootstrap'
-import "./Login.css"
+import {Container} from 'react-bootstrap';
+import "./Login.css";
 
 import AuthService from "../services/auth.service";
 
@@ -13,7 +13,7 @@ const required = (value) => {
     if (!value) {
       return (
         <div className="alert alert-danger" role="alert">
-          This field is required!
+          Required field!
         </div>
       );
     }
