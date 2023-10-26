@@ -12,7 +12,7 @@ import AuthService from "../services/auth.service";
 const required = (value) => {
     if (!value) {
       return (
-        <div className="alert alert-danger" role="alert">
+        <div className="alert alert-danger custom-alert" role="alert">
           Required field!
         </div>
       );
@@ -86,7 +86,8 @@ const Login = () => {
                       value = {email}
                       onChange = {onChangeEmail}
                       validations = {[required]}
-                      placeholder = "Email"
+                      placeholder = "Your email"
+                      style={{textAlign:"center"}}
                     />
                     <br/>
                     <h3>Password</h3>
@@ -97,14 +98,15 @@ const Login = () => {
                       value = {password}
                       onChange = {onChangePassword}
                       validations = {[required]}
-                      placeholder = "Password"
+                      placeholder = "Your password"
+                      style={{textAlign:"center"}}
                     />
                     <br/>
                     <button className = "btn btn-primary btn block" disabled={loading}>
                       {loading && (
                         <span className = "spinner-border spinner-border-sm"></span>
                       )}
-                      <span>Login</span>
+                      <span className = "button-text-h3">Login</span>
                     </button>
                     {message && (
                       <div className = "form-group">
