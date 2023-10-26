@@ -3,10 +3,10 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
-import {Container} from 'react-bootstrap';
-import {Link} from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import './Register.css';
+import {Container} from "react-bootstrap";
+import {Link} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import "./Register.css";
 
 import AuthService from "../services/auth.service";
 

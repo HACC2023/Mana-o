@@ -4,6 +4,7 @@
     align-items: center;
     justify-content: center;
     min-height:100vh;
+    padding-bottom: 60px;
     .card{
         background-color: #FFFFFF;
         text-align: center;
@@ -24,12 +25,12 @@
             padding: 10px 10px;
             display: block;
             margin: 0 auto;
-            width: 60%;
+            width: 80%;
         }
         & button{
             display: block;
             margin: 0 auto;
-            width: 60%;
+            width: 80%;
             background-color: #527CEC;
             color: #FFFFFF;
             &:hover {
@@ -37,7 +38,7 @@
             }
         }
         .custom-alert {
-            width:60%;
+            width:80%;
             display: block;
             margin: 0 auto;
         }
@@ -46,6 +47,16 @@
         }
         width: 90%;
         margin: 0 auto;
+    }
+    .bottom-tab-nav {
+        border-top: solid 1px #EBEBEB;
+        background-color: #254CF4;
+    }
+    .bottom-nav-link {
+        color: #00FAFF;
+    }
+    .bottom-nav-link.active {
+        color: #FFFFFF;
     }
 
 }
