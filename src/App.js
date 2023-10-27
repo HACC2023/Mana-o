@@ -5,6 +5,7 @@ import Landing from './components/Landing';
 import About from './components/About';
 import Login from './components/Login';
 import Register from './components/Register';
+import TestMap from './components/TestMap';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path = "/about" element={<About/>}/>
           <Route path = "/login" element={<Login/>}/>
           <Route path = "/register" element={<Register/>}/>
+          <Route path = "/testmap" element={<TestMap/>}/>
         </Routes>
       </div>
     </div>
