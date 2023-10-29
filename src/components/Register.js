@@ -1,73 +1,85 @@
 import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
-import {Container} from "react-bootstrap";
-import {Link} from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Container } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import "./Register.css";
 
 import AuthService from "../services/auth.service";
 
 const required = (value) => {
     if (!value) {
-      return (
-        <div className="alert alert-danger custom-alert" role="alert">
-          Required field!
-        </div>
-      );
+        return (
+            <div className="alert alert-danger custom-alert" role="alert">
+                Required field!
+            </div>
+        );
     }
-  };
+};
 
 const validName = (value) => {
-    // Checks that the name contains at least 1 character
     if (value.length < 1) {
-    return (
-        <div className = "alert alert-danger custom-alert" role="alert">
-            Name must be at least 1 character long.
-        </div>
-    );
-
+        return (
+            <div className="alert alert-danger custom-alert" role="alert">
+                Name must be at least 1 character long.
+            </div>
+        );
     }
-    // Checks that the name does not contain numbers
+
     if (/[0-9]/.test(value)) {
         return (
-            <div className = "alert alert-danger custom-alert" role="alert">
+            <div className="alert alert-danger custom-alert" role="alert">
                 Name cannot contain numbers.
             </div>
         );
     }
-    // Special characters that do not belong in an English name
-    const specialCharacters = ['!','@','#','$','%','^','&','*','(', ')', ',','.','?','"',":","{",'}','|','<','>'];
+
+    const specialCharacters = [
+        "!",
+        "@",
+        "#",
+        "$",
+        "%",
+        "^",
+        "&",
+        "*",
+        "(", ")",
+        ",",
+        ".",
+        "?",
+        '"',
+        ":",
+        "{",
+        "}",
+        "|",
+        "<",
+        ">",
+    ];
 
     for (const char of specialCharacters) {
-        if(value.includes(char)) {
+        if (value.includes(char)) {
             return (
-                <div className = "alert alert-danger custom-alert" role="alert">
+                <div className="alert alert-danger custom-alert" role="alert">
                     Name cannot contain special characters.
                 </div>
             );
         }
     }
-
 };
+
 const validPhoneNumber = (value) => {
-        
     if (value.length !== 12) {
         return (
-            <div className = "alert alert-danger custom-alert" role="alert">
-                Invalid phone number. Phone number must be in the format XXX-XXX-XXXX, where 'X' repesents a digit.
+            <div className="alert alert-danger custom-alert" role="alert">
+                Invalid phone number. Phone number must be in the format XXX-XXX-XXXX, where 'X' represents a digit.
             </div>
         );
-    } 
-    else {
-        return null;
     }
+};
 
-}
 const validEmail = (value) => {
-    if (!isEmail(value)){
+    if (!isEmail(value)) {
         return (
             <div className="alert alert-danger custom-alert" role="alert">
                 Not a valid email.
@@ -75,11 +87,12 @@ const validEmail = (value) => {
         );
     }
 };
+
 const validPassword = (value) => {
     if (value.length < 6 || value.length > 40) {
         return (
             <div className="alert alert-danger custom-alert" role="alert">
-                The password must be between 6 and 40 characters
+                The password must be between 6 and 40 characters.
             </div>
         );
     }
@@ -88,7 +101,7 @@ const validPassword = (value) => {
 const Register = () => {
     const form = useRef();
     const checkBtn = useRef();
-    let navigate = useNavigate;
+    let navigate = useNavigate();
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -101,38 +114,41 @@ const Register = () => {
     const [successful, setSuccessful] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
 
-    const onChangeFirstName = (e) =>
-    {
+    const onChangeFirstName = (e) => {
         const firstName = e.target.value;
         setFirstName(firstName);
-    }
-    const onChangeLastName = (e) =>
-    {
+    };
+
+    const onChangeLastName = (e) => {
         const lastName = e.target.value;
         setLastName(lastName);
-    }
+    };
+
     const onChangePhoneNumber = (e) => {
         const phoneNumber = e.target.value;
         setPhoneNumber(phoneNumber);
-    }
+    };
+
     const onChangeEmail = (e) => {
         const email = e.target.value;
         setEmail(email);
-    }
+    };
+
     const onChangePassword = (e) => {
         const password = e.target.value.trim();
         setPassword(password);
-    }
+    };
+
     const onChangeConfirmPassword = (e) => {
         const confirmPasswordValue = e.target.value.trim();
         setConfirmPassword(confirmPasswordValue);
         if (confirmPasswordValue !== password) {
             setPasswordMatch(false);
-        }
-        else {
+        } else {
             setPasswordMatch(true);
         }
-    }
+    };
+
     const handleRegister = (e) => {
         e.preventDefault();
         setIsRegistering(true);
@@ -141,9 +157,9 @@ const Register = () => {
 
         form.current.validateAll();
 
-        if (form.current.getChildContext()._errors.length === 0){
+        if (form.current.getChildContext()._errors.length === 0) {
             setIsRegistering(true);
-            AuthService.register(firstName, lastName).then(
+            AuthService.register(firstName, lastName, email, phoneNumber, password).then(
                 (response) => {
                     setMessage(response.data.message);
                     setSuccessful(true);
@@ -151,115 +167,154 @@ const Register = () => {
                 },
                 (error) => {
                     const responseMessage =
-                        (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
+                        (error.response && error.response.data && error.response.data.message) ||
                         error.message ||
                         error.toString();
 
-                        setMessage(responseMessage);
-                        setSuccessful(false);
+                    setMessage(responseMessage);
+                    setSuccessful(false);
                 }
             ).finally(() => {
                 setIsRegistering(false);
             });
-        }
-        else {
+        } else {
             setIsRegistering(false);
         }
     };
-    
-    return(
-        <div className = "register">
-            <div className = "responsive">
-                <Container className = "py-3">
-                    <div className = "card">
-                    <img src="/images/RegisterLogo.png" alt="register-logo-img" width="40%" height="40%"/>
+
+    return (
+        <div className="register">
+            <div className="responsive">
+                <Container className="py-3">
+                    <div className="card">
+                        <img src="/images/RegisterLogo.png" alt="register-logo-img" width="40%" height="40%" />
                         <Form onSubmit={handleRegister} ref={form}>
-                            <h3>First Name</h3>
-                            <Input
-                                type = "text"
-                                value = {firstName}
-                                onChange = {onChangeFirstName}
-                                validations = {[required,validName]}
-                                style={{textAlign:"center"}}
-                            />
-                            <br/>
-                            <h3>Last Name</h3>
-                            <Input
-                                type = "text"
-                                value = {lastName}
-                                onChange = {onChangeLastName}
-                                validations = {[required,validName]}
-                                style={{textAlign:"center"}}
-                            />
-                            <br/>
-                            <h3>Phone Number</h3>
-                            <Input
-                                type = "text"
-                                placeholder = "XXX-XXX-XXXX"
-                                value = {phoneNumber}
-                                onChange = {onChangePhoneNumber}
-                                validations = {[required, validPhoneNumber]}
-                                style={{textAlign:"center"}}
-                            />
-                            <br/>
-                            <h3>Email</h3>
-                            <Input
-                                type = "text"
-                                value = {email}
-                                onChange = {onChangeEmail}
-                                validations = {[required, validEmail]}
-                                style={{textAlign:"center"}}
-                            />
-                            <br/>
-                            <h3>Password</h3>
-                            <Input
-                                type = "password"
-                                value = {password}
-                                onChange={onChangePassword}
-                                validations = {[required, validPassword]}
-                                style={{textAlign:"center"}}
-                            />
-                            <br/>
-                            <h3>Confirm Password</h3>
-                            <Input
-                                type = "password"
-                                value = {confirmPassword}
-                                onChange = {onChangeConfirmPassword}
-                                validations = {[required]}
-                                style={{textAlign:"center"}}
-                            />
-                            <br/>
-                            {!passwordMatch && (
-                                <div className = "alert alert-danger custom-alert" role="alert">
-                                    Passwords do not match.
-                                </div>
-                            )}
-                            <button
-                                className = "btn btn-primary btn block"
-                                onClick={handleRegister}
-                                disabled={isRegistering}
-                                >
-                                    {isRegistering && (
-                                        <span className = "spinner-border spinner-border-sm"></span>
-                                    )}
-                                <span className="button-text-h3">{isRegistering ? "Registering":"Register"}</span>
-                            </button>
-                            {message && (
-                                    <div className = {successful ? "alert alert-success":"alert alert-danger"} role="alert">
-                                        {message}
+                            <div className="row">
+                                <div className="col-md-6 mb-2">
+                                    <div className="form-outline">
+                                        <label className="form-label" htmlFor="firstName">
+                                            First Name
+                                        </label>
+                                        <Input
+                                            type="text"
+                                            id="firstName"
+                                            value={firstName}
+                                            onChange={onChangeFirstName}
+                                            validations={[required, validName]}
+                                            style={{ textAlign: "center" }}
+                                            className="form-control form-control-lg"
+                                        />
                                     </div>
-                                )}
-                            <CheckButton style={{display:"none"}}ref={checkBtn}/>
-                            <br/>
+                                </div>
+                                <div className="col-md-6 mb-2">
+                                    <div className="form-outline">
+                                        <label className="form-label" htmlFor="lastName">
+                                            Last Name
+                                        </label>
+                                        <Input
+                                            type="text"
+                                            id="lastName"
+                                            value={lastName}
+                                            onChange={onChangeLastName}
+                                            validations={[required, validName]}
+                                            style={{ textAlign: "center" }}
+                                            className="form-control form-control-lg"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-6 mb-2 pb-2">
+                                    <div className="form-outline">
+                                        <label className="form-label" htmlFor="emailAddress">
+                                            Email
+                                        </label>
+                                        <Input
+                                            type="email"
+                                            id="emailAddress"
+                                            value={email}
+                                            onChange={onChangeEmail}
+                                            validations={[required, validEmail]}
+                                            style={{ textAlign: "center" }}
+                                            className="form-control form-control-lg"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="col-md-6 mb-2 pb-2">
+                                    <div className="form-outline">
+                                        <label className="form-label" htmlFor="phoneNumber">
+                                            Phone Number
+                                        </label>
+                                        <Input
+                                            type="tel"
+                                            id="phoneNumber"
+                                            placeholder="XXX-XXX-XXXX"
+                                            value={phoneNumber}
+                                            onChange={onChangePhoneNumber}
+                                            validations={[required, validPhoneNumber]}
+                                            style={{ textAlign: "center" }}
+                                            className="form-control form-control-lg"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-6 mb-2 pb-2">
+                                    <div className="form-outline">
+                                        <label className="form-label" htmlFor="retype-password">
+                                            Password
+                                        </label>
+                                        <Input
+                                            type="password"
+                                            id="password"
+                                            className="form-control form-control-lg"
+                                            value={password}
+                                            onChange={onChangePassword}
+                                            validations={[required, validPassword]}
+                                            style={{ textAlign: "center" }}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="col-md-6 pb-2">
+                                    <div className="form-outline">
+                                        <label className="form-label" htmlFor="retype-password">
+                                            Confirm Password
+                                        </label>
+                                        <Input
+                                            type="password"
+                                            id="retype-password"
+                                            className="form-control form-control-lg"
+                                            value={confirmPassword}
+                                            onChange={onChangeConfirmPassword}
+                                            validations={[required]}
+                                            style={{ textAlign: "center" }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="pt-10 mb-3">
+                                <button className="btn btn-primary custom-button" type="submit">
+                                    {isRegistering ? "Registering..." : "Submit"}
+                                </button>
+                            </div>
                         </Form>
-                        <span>Already have an account?</span>
-                        <Link className = "link" to="/login">Login</Link>
+                        {message && (
+                            <div className="form-group">
+                                <div className={successful ? "alert alert-success" : "alert alert-danger"} role="alert">
+                                    {message}
+                                </div>
+                            </div>
+                        )}
+                        <span className="mt-2  mb-5">
+              Already have an account? <Link className="link" to="/login">
+                Login
+              </Link>
+            </span>
                     </div>
                 </Container>
             </div>
         </div>
     );
 };
+
 export default Register;
