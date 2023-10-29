@@ -258,8 +258,8 @@ const Register = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="row">
-                                <div className="col-md-6 mb-2 pb-2">
+                            <div className="row mb-4 ">
+                                <div className="col-md-6 pb-2">
                                     <div className="form-outline">
                                         <label className="form-label" htmlFor="retype-password">
                                             Password
