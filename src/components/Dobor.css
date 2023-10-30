@@ -1,0 +1,8 @@
+.newline-label {
+    display: block;
+    margin-bottom: 10px;
+}
+.custom-dropdown {
+    width: 100%;
+    max-width: 300px;
+}
