@@ -20,15 +20,20 @@ const Dobor = () =>{
     })
 
     const [question4, setQuestion4] = useState({
-        foulingLevel:[]
+        foulingLevel:""
     })
     const [question5, setQuestion5] = useState({
         locationOnshore:"",
         locationOffshore:""
     })
 
+    const [question6, setQuestion6] = useState({
+        selectedIsland:""
+    })
+
     const [errorQuestion1, setErrorQuestion1] = useState(null);
     const [errorQuestion5, setErrorQuestion5] = useState(null);
+    const [errorQuestion6, setErrorQuestion6] = useState(null);
     const [submitted, setSubmitted] = useState(false);
 
     const handleQ1CheckboxChange = (event) => {
@@ -98,6 +103,18 @@ const Dobor = () =>{
         }));
  
     }
+    useEffect(() => {
+        if(question5.selectedOption === locationOptions[5]) {
+            setQuestion6({selectedIsland:island[0]});
+        }
+        else {
+            setQuestion6({selectedIsland:""});
+        }
+    }, [question5.selectedOption]);
+
+    const handleQ6SelectChange = (event) => {
+        setQuestion6({selectedIsland: event.target.value});
+    }
     
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -118,6 +135,12 @@ const Dobor = () =>{
         else {
             setErrorQuestion5(null);
         }
+        if (!question6.selectedIsland) {
+            setErrorQuestion6("Must indicate which Hawaiian island");
+        }
+        else {
+            setErrorQuestion6(null);
+        }
         console.log('Question 1 - Debris Types:', question1.debrisFound);
         console.log('Question 1 - Other Debris:', question1.otherDebris);
         console.log('Question 2 - Container:', question2.selectedOption);
@@ -125,6 +148,7 @@ const Dobor = () =>{
         console.log('Question 4 - Marine Growth:', question4.foulingLevel);
         console.log('Question 5 - Location Onshore:', question5.locationOnshore);
         console.log('Question 5 - Location Offshore:', question5.locationOffshore);
+        console.log('Question 6 - Island:', question6.selectedIsland);
         
     };
     const debrisTypeOptions = [
@@ -170,6 +194,15 @@ const Dobor = () =>{
         "On the beach BELOW the high wash of the waves",
         "On the beach ABOVE the high wash of the waves",
         "None of the above, a description follows below"
+    ]
+    const island = [
+        "Offshore",
+        "Big Island",
+        "Kauai",
+        "Lanai",
+        "Maui",
+        "Molokai",
+        "Oahu"
     ]
     return(
         <div className = "dobor">
@@ -282,11 +315,11 @@ const Dobor = () =>{
                                 <select
                                     id="question-4"
                                     name="question-4"
-                                    value={question4.selectedOption || ""}
+                                    value={question4.foulingLevel || ""}
                                     onChange={handleQ4SelectChange}
                                     className="custom-dropdown"
                                 >
-                                    <option value="" disabled>Choose an option</option>
+                                    <option value="">Choose an option</option>
                                     {foulingLevels.slice(1).map((option,index) => (
                                         <option key={index} value={option}>
                                             {option}
@@ -342,6 +375,29 @@ const Dobor = () =>{
                             {submitted && (errorQuestion1 || errorQuestion5) && (
                                 <div className="alert alert-danger" role="alert">Please check the form for errors.</div>
                             )}
+                            <div className="newline-label">
+                                <label>
+                                    6. If on land or in the nearshore waters - indicate which island
+                                </label>
+                            </div>
+                            <div className="newline-label">
+                                <select
+                                    id="question-6"
+                                    name="question-6"
+                                    value={question6.selectedIsland}
+                                    onChange={handleQ6SelectChange}
+                                    className="custom-dropdown"
+                                >
+                                    <option value="" disabled>Indicate the island</option>
+                                    <option value={island[0]}>Offshore</option>
+                                        {island.slice(1).map((option,index) => (
+                                            <option key={index} value={option}>
+                                                {option}
+                                            </option>
+                                        ))}
+                                </select>
+                            </div>
+                            {errorQuestion6 && <div className="alert alert-danger" role="alert">{errorQuestion6}</div>}
                             <button type="submit">Submit</button>
                         </Form>
                     </div>
