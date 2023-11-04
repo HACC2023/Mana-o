@@ -25,20 +25,9 @@
             padding: 10px 10px;
             display: block;
             margin: 0 auto;
-            width: 60%;
-        }
-        & button{
-            display: block;
-            margin: 0 auto;
-            width: 60%;
-            background-color: #527CEC;
-            color: #FFFFFF;
-            &:hover {
-                background-color:blue;
-            }
         }
         .custom-alert {
-            width:60%;
+            width:80%;
             display: block;
             margin: 0 auto;
         }
@@ -49,5 +38,19 @@
         margin: 0 auto;
         
     }
-
+.row{
+    margin-right: 30px;
+    margin-left: 30px;
+}
+.custom-button {
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+    height: 50px;
+    background-color: #527CEC;
+    color: #FFFFFF;
+&:hover {
+     background-color:blue;
+ }
+}
 }
