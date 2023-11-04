@@ -7,7 +7,7 @@ const getPublicContent = () => {
     return axios.get(API_URL + "all");
 };
 
-const getUserPageData = () => {
+const getContractorPageData = () => {
   return axios.get(API_URL + "user", { headers: authHeader() });
 };
 
@@ -17,7 +17,7 @@ const getAdminPageData = () => {
 
 const UserService = {
   getPublicContent,
-  getUserPageData,
+  getContractorPageData,
   getAdminPageData,
 };
 

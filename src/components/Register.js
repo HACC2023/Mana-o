@@ -110,6 +110,7 @@ const Register = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordMatch, setPasswordMatch] = useState(true);
+    const [companyName, setCompanyName] = useState("");
     const [message, setMessage] = useState("");
     const [successful, setSuccessful] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
@@ -148,6 +149,11 @@ const Register = () => {
             setPasswordMatch(true);
         }
     };
+    const onChangeCompanyName = (e) => {
+        const companyName = e.target.value;
+        setCompanyName(companyName);
+
+    }
 
     const handleRegister = (e) => {
         e.preventDefault();
@@ -290,6 +296,25 @@ const Register = () => {
                                             style={{ textAlign: "center" }}
                                         />
                                     </div>
+                                </div>
+                            </div>
+                            <div className="row mb-4 justify-content-center">
+                                <div className="col-md-6 pb-2">
+                                    <div className="form-outline">
+                                    <label className="form-label" htmlFor="company-name">
+                                            Company Name<br/>(Leave as "None" for Non-Contractors)
+                                    </label>
+                                    <Input
+                                            type="text"
+                                            id="company-name"
+                                            placeholder = "None"
+                                            className="form-control form-control-lg"
+                                            value={companyName}
+                                            onChange={companyName}
+                                            style={{ textAlign: "center" }}
+                                        />
+                                    </div>
+
                                 </div>
                             </div>
                             <div className="pt-10 mb-3">
