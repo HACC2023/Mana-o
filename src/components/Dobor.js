@@ -176,6 +176,9 @@ const Dobor = () =>{
         const maxImages = 6;
         const maxSizeInBytes = 30 * 1024 * 1024; //30MB
 
+        for (let i=0; i < imageFiles.length; i++) {
+            const file = imageFiles[i];
+        }
         if(imagesArray.length + imageFiles.length > maxImages) {
             alert("You can only upload up to 6 images.")
         }

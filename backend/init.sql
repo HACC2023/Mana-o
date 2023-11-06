@@ -12,8 +12,8 @@ drop table if exists user_role cascade;
 
 create table detections(
    id serial,
-   dfg_event_id text,
-   geographic_region text,
+   removal_id int unique,
+   dobor_designation text unique,
    debris_type_detected text,
    debris_container text,
    boat_claim text,
@@ -28,13 +28,14 @@ create table detections(
    debris_image_filenames text,
    date_detected date default null,
    time_detected time default null,
+   geographic_region text,
    scientific_organization text,
    scientific_documenter text,
    scientific_debris_type text,
    debris_primary_material text,
    dfad_part text,
    documentation_notes text,
-   scientific_image_filenames text,
+   photographer_name text,
    animals_present boolean,
    animals_present_description text,
    debris_length numeric(10,2),
@@ -54,6 +55,7 @@ create table users(
    email text unique,
    password text,
    phone_number text,
+   approved boolean default false,
    primary key (id)
 );
 
