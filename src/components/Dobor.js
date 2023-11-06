@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import Form from "react-validation/build/form";
 import {Container, Row, Col} from "react-bootstrap";
 import './Dobor.css';
+import { icon } from "leaflet";
 
 const Dobor = () =>{
     
@@ -40,6 +41,8 @@ const Dobor = () =>{
         customDescription:""
     })
 
+    const [reportImages,setReportedImages] = useState([]);
+    const [imageCount, setImageCount] = useState(0);
     const [errorQuestion1, setErrorQuestion1] = useState(null);
     const [errorQuestion4, setErrorQuestion4] = useState(null);
     const [errorQuestion5, setErrorQuestion5] = useState(null);
@@ -166,6 +169,37 @@ const Dobor = () =>{
         }
  
     }
+
+    const handleQ10ImageChange = (event) => {
+        const imageFiles = event.target.files;
+        const imagesArray = [...reportImages];
+        const maxImages = 6;
+        const maxSizeInBytes = 30 * 1024 * 1024; //30MB
+
+        if(imagesArray.length + imageFiles.length > maxImages) {
+            alert("You can only upload up to 6 images.")
+        }
+        else {
+            for(let i=0; i<imageFiles.length; i++){
+                if (imagesArray.length + i < maxImages){
+                    imagesArray.push(URL.createObjectURL(imageFiles[i]));
+                }
+                else {
+                    break;
+                }
+                
+            }
+        }
+        
+        setReportedImages(imagesArray);
+    }
+
+    const removeImage = (index) => {
+        const updatedImages = [...reportImages];
+        updatedImages.splice(index,1);
+        setReportedImages(updatedImages);
+        setImageCount(imageCount -1)
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -561,6 +595,27 @@ const Dobor = () =>{
                             {errorQuestion9 && (
                                             <div className="alert alert-danger" role="alert">{errorQuestion9}</div>
                             )}
+                            <div className="newline-label">
+                                <label>
+                                    10. If you can take a photograph, please turn on the locator/GPS
+                                    of your device, take the picture and attach it (Six image/30MB maximum)
+                                </label>
+                            </div>
+                            {reportImages.map((image,index) => (
+                                <div key={index}>
+                                    <img alt="not found" width={"250px"} src={image}/>
+                                    <br/>
+                                    <button onClick={() => removeImage(index)} className="remove-button">Remove</button>
+                                </div>
+                            ))}
+                            <br/>
+                            <br/>
+                            <input
+                                type="file"
+                                name="reportImages"
+                                onChange={handleQ10ImageChange}
+                                multiple
+                            />
                             <button type="submit">Submit</button>
                         </Form>
                             </Col>

@@ -36,4 +36,12 @@
     width: 100%;
     max-width: 300px;
 }
-
+.remove-button {
+    border:none;
+    justify-content:center;
+    margin: 0 auto;
+    display:block;
+}
+.remove-button:hover {
+    background-color:#bbbbbb;
+}
