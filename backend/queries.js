@@ -9,15 +9,17 @@ const connection = new pg.Pool({
 });
 
 function createUser(request, response) {
-   const first_name = request.body.first_name;
-   const last_name = request.body.last_name;
-   const phone_number = request.body.phone_number;
+   const firstName = request.body.firstName;
+   const lastName = request.body.lastName;
+   const phoneNumber = request.body.phoneNumber;
    const email = request.body.email;
    const password = request.body.password;
-   const company = request.body.company;
-   let sql = "select addUser(" + "'" + first_name + "','" + last_name + 
+   let company = request.body.company;
+   console.log("first name:" + firstName);
+   console.log(company);
+   let sql = "select addUser(" + "'" + firstName + "','" + lastName + 
       "','" + company.trim() + "','" + email + "','" + password + "','" + 
-      phone_number + "')";
+      phoneNumber + "')";
    connection.query(sql, function(err, results) {
       if (results.rows[0].adduser > 0) {
          response.status(201).send('User created\n');

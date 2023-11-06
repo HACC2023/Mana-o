@@ -110,7 +110,7 @@ const Register = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordMatch, setPasswordMatch] = useState(true);
-    const [companyName, setCompanyName] = useState("");
+    const [company, setCompany] = useState("");
     const [message, setMessage] = useState("");
     const [successful, setSuccessful] = useState(false);
     const [isRegistering, setIsRegistering] = useState(false);
@@ -149,9 +149,9 @@ const Register = () => {
             setPasswordMatch(true);
         }
     };
-    const onChangeCompanyName = (e) => {
-        const companyName = e.target.value;
-        setCompanyName(companyName);
+    const onChangeCompany = (e) => {
+        const company = e.target.value.trim();
+        setCompany(company);
 
     }
 
@@ -165,7 +165,7 @@ const Register = () => {
 
         if (form.current.getChildContext()._errors.length === 0) {
             setIsRegistering(true);
-            AuthService.register(firstName, lastName, email, phoneNumber, password).then(
+            AuthService.register(firstName, lastName, email, phoneNumber, password, company).then(
                 (response) => {
                     setMessage(response.data.message);
                     setSuccessful(true);
@@ -309,8 +309,8 @@ const Register = () => {
                                             id="company-name"
                                             placeholder = "None"
                                             className="form-control form-control-lg"
-                                            value={companyName}
-                                            onChange={companyName}
+                                            value={company}
+                                            onChange={onChangeCompany}
                                             style={{ textAlign: "center" }}
                                         />
                                     </div>
