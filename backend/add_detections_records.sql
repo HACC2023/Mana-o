@@ -1,0 +1,16 @@
+insert into detections(dfg_event_id,geographic_region,debris_type_detected, debris_container, boat_claim,
+biofouling_level,general_debris_location,latitude,longitude,island,
+nearest_landmark,debris_relative_location,debris_description,
+debris_image_filenames,date_detected,time_detected,
+scientific_organization,scientific_documenter,scientific_debris_type,
+debris_primary_material,dfad_part,documentation_notes,scientific_image_filenames,
+animals_present,animals_present_description,debris_length,debris_width,
+debris_average_height,debris_max_height,debris_circumference,
+debris_dimension_comments) values
+('MAU_1','MHI', 'A mass of netting and/or other fishing gear;An abandoned/derelict boat;A container/drum/cylinder;A large concentration of plastics',
+'Partially filled','Yes, I want to claim it for personal use', '5','On the beach BELOW the high wash of the waves',
+'20.9178° N','156.6966° W','Maui','Kaanapali Beach','200 ft west','pushed inland above the high wash of the waves so it cannot be swept away',
+'MAU_1_netting.jpg,MAU_1_boat.jpg,MAU_1_cylinder.jpg,MAU_1_plastics.jpg','2019-01-01','06:24:12',
+'CMDR','Cameron Souza','Conglomerate','Plastic','raft & GPS tracker',
+'Conglomerate contains several nets, lines, ML with hook. Multiple unlabeled plastic drums with lids. Fiberglass fishing boat.',
+''

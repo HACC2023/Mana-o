@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import Form from "react-validation/build/form";
-import {Container} from "react-bootstrap";
+import {Container, Row, Col} from "react-bootstrap";
 import './Dobor.css';
 
 const Dobor = () =>{
@@ -27,52 +27,78 @@ const Dobor = () =>{
         locationOffshore:""
     })
 
-    const [question6, setQuestion6] = useState({
+    const [question6, setQuestion6] = useState("");
+
+    const [question7, setQuestion7] = useState({
         selectedIsland:""
     })
 
+    const [question8, setQuestion8] = useState("");
+
+    const [question9, setQuestion9] = useState({
+        debrisDescription:"",
+        customDescription:""
+    })
+
     const [errorQuestion1, setErrorQuestion1] = useState(null);
+    const [errorQuestion4, setErrorQuestion4] = useState(null);
     const [errorQuestion5, setErrorQuestion5] = useState(null);
-    const [errorQuestion6, setErrorQuestion6] = useState(null);
+    const [errorQuestion7, setErrorQuestion7] = useState(null);
+    const [errorQuestion9, setErrorQuestion9] = useState(null);
     const [submitted, setSubmitted] = useState(false);
 
+    const [showDescriptionTextarea, setShowQuestion5] = useState(false);
+    
     const handleQ1CheckboxChange = (event) => {
         const {name, checked} = event.target;
-        if (name === 'other' && !checked) {
+        let updatedDebrisFound;
+        if (name === 'other') {
+            updatedDebrisFound = checked
+            ?[...question1.debrisFound, name]
+            : question1.debrisFound.filter((item) => item !== name);
+        }
+        else {
+            updatedDebrisFound = checked
+            ? [...question1.debrisFound,name]
+            : question1.debrisFound.filter((item) => item !== name);
+        };
+        if(!updatedDebrisFound.includes('Other - describe below')) {
             setQuestion1((prevQuestion1) => ({
                 ...prevQuestion1,
-                debrisFound: prevQuestion1.debrisFound.filter((item) => item !== name),
-                otherDebris:'N/A'
+                debrisFound: updatedDebrisFound,
+                otherDebris:''
             }));
         }
         else {
-            const updatedDebrisFound = checked
-            ?[...question1.debrisFound, name]
-            : question1.debrisFound.filter((item) =>item !== name);
-
-            const otherDebris = updatedDebrisFound.includes('Other - describe below')
-            ? question1.otherDebris
-            : 'N/A';
-
             setQuestion1((prevQuestion1) => ({
                 ...prevQuestion1,
-                debrisFound:updatedDebrisFound,
-                otherDebris
+                debrisFound: updatedDebrisFound
             }));
-
-        }
-        
+        }  
     };
 
     const handleQ1OtherDescriptionChange = (event) => {
-        setQuestion1((prevQuestion1) => ({
+        if(event.target.value === "") {
+            setQuestion1((prevQuestion1) => ({
+                ...prevQuestion1
+            }));
+        }
+        else {
+            setQuestion1((prevQuestion1) => ({
             ...prevQuestion1,
             otherDebris: event.target.value
-        }));
+            }));
+        }
     };
     useEffect(() => {
        if(!question1.debrisFound.includes(debrisTypeOptions[2])) {
         setQuestion2({selectedOption: containerOptions[0]});
+       }
+       if(question1.debrisFound.includes(debrisTypeOptions[2])) {
+        setQuestion2({selectedOption: containerOptions[1]});
+       }
+       else {
+        setQuestion2({selectedOption:""});
        }
     }, [question1.debrisFound]);
 
@@ -85,6 +111,7 @@ const Dobor = () =>{
         }
     }, [question1.debrisFound]);
 
+
     const handleQ3RadioChange = (event) => {
         setQuestion3({selectedOption: event.target.value});
     }
@@ -94,39 +121,77 @@ const Dobor = () =>{
     }
     const handleQ5RadioChange = (event) => {
         const value = event.target.value;
-
         setQuestion5((prevQuestion5) => ({
             ...prevQuestion5,
             selectedOption: value,
             locationOnshore: value !== "other" ? value: "N/A",
-            locationOffshore: value !== "other" ? "N/A" : ""
+            locationOffshore: ""
         }));
  
     }
+    const handleQ6InputChange = (event) => {
+        setQuestion6(event.target.value);
+    }
     useEffect(() => {
-        if(question5.selectedOption === locationOptions[5]) {
-            setQuestion6({selectedIsland:island[0]});
+        if(question7.selectedOption === locationOptions[5]) {
+            setQuestion7({selectedIsland:island[0]});
         }
         else {
-            setQuestion6({selectedIsland:""});
+            setQuestion7({selectedIsland:""});
         }
-    }, [question5.selectedOption]);
+    }, [question7.selectedOption]);
 
-    const handleQ6SelectChange = (event) => {
-        setQuestion6({selectedIsland: event.target.value});
+    const handleQ7SelectChange = (event) => {
+        setQuestion7({selectedIsland: event.target.value});
     }
     
+    const handleQ8InputChange = (event) => {
+        setQuestion8(event.target.value);
+    }
+
+    const handleQ9RadioChange = (event) => {
+        const value = event.target.value;
+        if (value === "Other - please explain how urgent recovery/removal is") {
+            setQuestion9((prevQuestion9) => ({
+                ...prevQuestion9,
+                selectedOption: value
+            }));
+        }
+        else {
+            setQuestion9((prevQuestion9) => ({
+                ...prevQuestion9,
+                selectedOption:value,
+                customDescription:""
+            }));
+        }
+ 
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
         setSubmitted(true);
-        if (question1.debrisFound.length === 0 && question1.otherDebris.trim() === "") {
+        
+        if (question1.debrisFound.includes('Other - describe below')) {
+           const filteredDebris = question1.debrisFound.filter(option => option !== 'Other - describe below');
+
+           if (filteredDebris.length === 0) {
             setErrorQuestion1("Please select at least one option or describe in 'Other'");
+            }
+            else {
+                setErrorQuestion1(null);
+            }
         }
-        else {
-            setErrorQuestion1(null);
-        }
+        
+        
         if(!question2.selectedOption) {
             setQuestion2({selectedOption: containerOptions[0]});
+        }
+
+        if(!question4.foulingLevel){
+            setErrorQuestion4("Please select a biofouling level")
+        }
+        else {
+            setErrorQuestion4(null);
         }
         
         if(!question5.selectedOption) {
@@ -135,20 +200,45 @@ const Dobor = () =>{
         else {
             setErrorQuestion5(null);
         }
-        if (!question6.selectedIsland) {
-            setErrorQuestion6("Must indicate which Hawaiian island");
+        if (!question7.selectedIsland) {
+            setErrorQuestion7("Must indicate which Hawaiian island");
         }
         else {
-            setErrorQuestion6(null);
+            setErrorQuestion7(null);
         }
-        console.log('Question 1 - Debris Types:', question1.debrisFound);
-        console.log('Question 1 - Other Debris:', question1.otherDebris);
+        if(!question9.selectedOption) {
+            setErrorQuestion9("Debris description is required");
+        }
+        else {
+            setErrorQuestion9(null);
+        }
+        let locationOutput = question5.locationOnshore || (question5.locationOffshore !== "" ? question5.locationOffshore : "");
+        let output = question1.debrisFound.includes('Other - describe below')
+            ? [...question1.debrisFound.filter(option => option !== 'Other - describe below')]
+            : question1.debrisFound.join(',');
+        if (question1.otherDebris === "") {
+            output += question1.otherDebris;
+        }
+        else {
+            output += "," + question1.otherDebris;
+        }
+        //output += "," + question1.otherDebris
+        output += ";" + question2.selectedOption
+        output += ";" + question3.selectedOption
+        output += ";" + question4.foulingLevel;
+        output += ";" + locationOutput + question5.locationOffshore;
+        output += ";" + question6;
+        output += ";" + question7.selectedIsland ;
+        output += ";" + question8 + "|"
+        console.log(output);
+
+        /*console.log('Question 1 - Other Debris:', question1.otherDebris);
         console.log('Question 2 - Container:', question2.selectedOption);
         console.log('Question 3 - Boat:', question3.selectedOption);
         console.log('Question 4 - Marine Growth:', question4.foulingLevel);
         console.log('Question 5 - Location Onshore:', question5.locationOnshore);
         console.log('Question 5 - Location Offshore:', question5.locationOffshore);
-        console.log('Question 6 - Island:', question6.selectedIsland);
+        console.log('Question 6 - Island:', question6.selectedIsland);*/
         
     };
     const debrisTypeOptions = [
@@ -164,10 +254,7 @@ const Dobor = () =>{
         "Did not find a container/drum/cylinder",
         "Empty",
         "Partially filled",
-        "Full",
-        "Multiple empty containers",
-        "Multiple partially filled containers",
-        "Multiple full containers"
+        "Full"
     ]
     const boatOptions = [
         "Yes, I want to claim it for personal use",
@@ -188,8 +275,8 @@ const Dobor = () =>{
         "10 - abundant, healthy growth of algae and barnacles covering submerged areas"
     ]
     const locationOptions = [
-        "At sea, BEYOND three miles from nearest land",
-        "At sea, WITHIN three miles from nearest land",
+        "Federal Waters: At sea, BEYOND three miles from nearest land",
+        "State Waters: At sea, WITHIN three miles from nearest land",
         "In the shore break",
         "On the beach BELOW the high wash of the waves",
         "On the beach ABOVE the high wash of the waves",
@@ -197,6 +284,7 @@ const Dobor = () =>{
     ]
     const island = [
         "Offshore",
+        "Midway Atoll",
         "Big Island",
         "Kauai",
         "Lanai",
@@ -204,12 +292,33 @@ const Dobor = () =>{
         "Molokai",
         "Oahu"
     ]
+    const debrisDescription = [
+        "Caught on the reef or is partially buried in sand",
+        "Loose in the shore break or on the shoreline and could go back out to sea",
+        "trapped in a tide pool and cannot escape",
+        "loose on the shore but caught in the vegetation line",
+        "Tied to a fixed object so it cannot be swept away",
+        "Pushed inland above the high wash of the waves so it cannot be swept away",
+        "Other - please explain how urgent recovery/removal is"
+    ]
     return(
         <div className = "dobor">
             <div className = "responsive">
                 <Container className = "py-3">
                     <div className = "card">
-                        <Form onSubmit = {handleSubmit}>
+                        <Row>
+                            <Col className="d-flex align-items-center">
+                                <img
+                                    src="/images/Dobor.png"
+                                    alt="Dobor-logo-img"
+                                    width="80%"
+                                    height="auto"
+                                />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={9} className="d-flex align-items-center">
+                            <Form onSubmit = {handleSubmit} id="doborQ">
                             <div className="newline-label">
                                 <label>1. I found/located the following:</label>
                             </div>
@@ -327,8 +436,8 @@ const Dobor = () =>{
                                     ))}
                                 </select>
                             </div>
-                            {!question4.foulingLevel && (
-                                <div className="alert alert-danger" role="alert">Please select a biofouling level.</div>
+                            {errorQuestion4 && (
+                                <div className="alert alert-danger" role="alert">{errorQuestion4}</div>
                             )}
                             <div className="newline-label">
                                 <label>
@@ -344,28 +453,25 @@ const Dobor = () =>{
                                             value={option}
                                             checked={question5.selectedOption === option}
                                             onChange={handleQ5RadioChange}
+                                            id={"location-" + index}
                                         />
                                         {option}
                                     </label>
-                                    {option === "None of the above, a description follows below" && (
-                                        <p>
-                                            If located offshore, enter latitude and longitude (i.e. 21.3161
-                                            -157.8906) or provide a position description and any information on currents
-                                            and winds that could help in relocating the debris.
-                                        </p>
-                                    )}
+                                    {option === "None of the above, a description follows below"}
                                 </div>
                             ))}
+                            
                             {question5.selectedOption === 'None of the above, a description follows below' && (
                                 <textarea
                                     rows="10"
                                     cols="20"
                                     value={question5.locationOffshore}
                                     onChange={(event) => {
-                                        setQuestion5({
-                                            ...question5,
-                                            locationOffshore:event.target.value
-                                        });
+                                        const updatedLocation = event.target.value
+                                        setQuestion5((prevQuestion5) => ({
+                                            ...prevQuestion5,
+                                            locationOffshore:updatedLocation
+                                        }));
                                     }}
                                 />
                             )}
@@ -376,16 +482,26 @@ const Dobor = () =>{
                                 <div className="alert alert-danger" role="alert">Please check the form for errors.</div>
                             )}
                             <div className="newline-label">
+                                <label>6. Enter latitude and longitude (i.e. 21.3161 -157.8906)
+                                    or provide a position description and any information on currents and winds that could help in relocating the debris.</label>
+                            </div>
+                            <textarea
+                                rows="2"
+                                cols="20"
+                                value={question6}
+                                onChange={handleQ6InputChange}
+                            />
+                            <div className="newline-label">
                                 <label>
-                                    6. If on land or in the nearshore waters - indicate which island
+                                    7. If on land or in the nearshore waters - indicate which island
                                 </label>
                             </div>
                             <div className="newline-label">
                                 <select
-                                    id="question-6"
-                                    name="question-6"
-                                    value={question6.selectedIsland}
-                                    onChange={handleQ6SelectChange}
+                                    id="question-7"
+                                    name="question-7"
+                                    value={question7.selectedIsland}
+                                    onChange={handleQ7SelectChange}
                                     className="custom-dropdown"
                                 >
                                     <option value="" disabled>Indicate the island</option>
@@ -397,9 +513,58 @@ const Dobor = () =>{
                                         ))}
                                 </select>
                             </div>
-                            {errorQuestion6 && <div className="alert alert-danger" role="alert">{errorQuestion6}</div>}
+                            {errorQuestion7 && <div className="alert alert-danger" role="alert">{errorQuestion7}</div>}
+                            <div className="newline-label">
+                                <label>8. Nearest town, street address, nearby landmarks:</label>
+                                <br/>
+                                <textarea
+                                    rows="4"
+                                    cols="20"
+                                    value={question8}
+                                    onChange={handleQ8InputChange}
+                                />
+                            </div>
+                            <div className="newline-label">
+                                <label>
+                                    9. The debris is best described as:
+                                </label>
+                            </div>
+                            {debrisDescription.map((option,index) => (
+                                <div className="newline-label" key={index}>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="description"
+                                            value={option}
+                                            checked={question9.selectedOption === option}
+                                            onChange={handleQ9RadioChange}
+                                            id={"description-" + index}
+                                        />
+                                        {option}
+                                    </label>
+                                    {option === "Other - please explain how urgent recovery/removal is" && question9.selectedOption === option &&(
+                                        <textarea
+                                            rows="10"
+                                            cols="20"
+                                            value={question9.customDescription}
+                                            onChange={(event) => {
+                                                const updatedDescription = event.target.value
+                                                setQuestion9((prevQuestion9) => ({
+                                                    ...prevQuestion9,
+                                                    customDescription:updatedDescription
+                                                }));
+                                            }}
+                                        />
+                                    )}
+                                </div>
+                            ))}
+                            {errorQuestion9 && (
+                                            <div className="alert alert-danger" role="alert">{errorQuestion9}</div>
+                            )}
                             <button type="submit">Submit</button>
                         </Form>
+                            </Col>
+                        </Row>
                     </div>
                 </Container>
             </div>
