@@ -15,10 +15,15 @@ const getAdminPageData = () => {
   return axios.get(API_URL + "admin", { headers: authHeader() });
 };
 
+const getUnapprovedUsers = () => {
+  return axios.get(API_URL + "unapprovedusers", {hearders: authHeader()});
+}
+
 const UserService = {
   getPublicContent,
   getUsersPageData,
   getAdminPageData,
+  getUnapprovedUsers
 };
 
 export default UserService;

@@ -11,9 +11,9 @@ const connection = new pg.Pool({
 });
 
 function createUser(request, response) {
-   const first_name = request.body.first_name;
-   const last_name = request.body.last_name;
-   const phone_number = request.body.phone_number;
+   const first_name = request.body.firstName;
+   const last_name = request.body.lastName;
+   const phone_number = request.body.phoneNumber;
    const email = request.body.email;
    const password = request.body.password;
    let company = request.body.company;
@@ -74,7 +74,7 @@ function signin(request, response) {
 }
 
 function getUsers(request, response) {
-   let sql = 'select first_name, last_name, company, email, ' + 
+   let sql = 'select id, first_name, last_name, company, email, ' + 
       'phone_number from users where approved=true';
    connection.query(sql, function(err, results) {
       response.status(200).json(results.rows);
@@ -82,7 +82,7 @@ function getUsers(request, response) {
 }
 
 function getUnapprovedUsers(request, response) {
-   let sql = 'select first_name, last_name, company, email,' +
+   let sql = 'select id, first_name, last_name, company, email,' +
       'phone_number, approved from users where approved=false';
    connection.query(sql, function(err, results) {
       response.status(200).json(results.rows);

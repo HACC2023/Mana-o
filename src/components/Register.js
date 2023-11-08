@@ -66,6 +66,7 @@ const validName = (value) => {
             );
         }
     }
+    return null;
 };
 
 const validPhoneNumber = (value) => {
@@ -117,16 +118,19 @@ const Register = () => {
 
     const onChangeFirstName = (e) => {
         const firstName = e.target.value;
+        console.log("First Name:", firstName);
         setFirstName(firstName);
     };
 
     const onChangeLastName = (e) => {
         const lastName = e.target.value;
+        console.log("Last name:", lastName);
         setLastName(lastName);
     };
 
     const onChangePhoneNumber = (e) => {
         const phoneNumber = e.target.value;
+        console.log("Phone number:", phoneNumber);
         setPhoneNumber(phoneNumber);
     };
 
@@ -165,9 +169,13 @@ const Register = () => {
 
         if (form.current.getChildContext()._errors.length === 0) {
             setIsRegistering(true);
-            AuthService.register(firstName, lastName, email, phoneNumber, password, company).then(
+            AuthService.register(firstName, lastName, phoneNumber, email, password, company).then(
                 (response) => {
+                    console.log("Registration response data:", response.data);
                     setMessage(response.data.message);
+                    if (response.data.user) {
+                        console.log("user data:", response.data.user);
+                    }
                     setSuccessful(true);
                     navigate("/login");
                 },
@@ -252,9 +260,9 @@ const Register = () => {
                                             Phone Number
                                         </label>
                                         <Input
-                                            type="tel"
+                                            type="text"
                                             id="phoneNumber"
-                                            placeholder="XXX-XXX-XXXX"
+                                            placeholder="000-000-0000"
                                             value={phoneNumber}
                                             onChange={onChangePhoneNumber}
                                             validations={[required, validPhoneNumber]}

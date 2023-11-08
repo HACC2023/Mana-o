@@ -1,74 +1,85 @@
 import React, {useState, useEffect} from 'react';
+import UserService from '../services/user.service';
 import {Container} from 'react-bootstrap'
 
-export const Checkbox = ({ isChecked, label, checkHandler, index }) => {
-
-   return(
-      <div>
-         <input
-            type="checkbox"
-            id={`checkbox-${index}`}
-            checked={isChecked}
-            onChange={checkHandler}
-         />
-      </div>
-   );
-}
 
 const ApproveUsers = () => {
     const [users,setUsers] = useState([]);
-    const [selectedUsers,setSelectedUsers] = useState([]);
-    useEffect(() => {
-        fetch("http://localhost:8080/unapprovedusers")
-            .then((res) => res.json())
-            .then((data) => setUsers(data));
-    }, [JSON.stringify(users)]);
-    users.map((user) => {
-        user.checked = false;
-    });
-    
-    const updateCheckboxStatus = (index) => {
-        const updatedUsers = [...users];
-        updatedUsers[index] = {...updatedUsers[index], checked: !updatedUsers[index].checked};
-        setUsers(updatedUsers);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [approvedUsers, setApprovedUsers] = useState({});
+
+    const fetchData = async () => {
+        try {
+            const response = await UserService.getUnapprovedUsers();
+            const userData = response.data;
+            console.log(userData);
+            setUsers(userData);
+            setLoading(false);
+        }
+        catch (err){
+            console.error('Error fetching user data:', err);
+            setError(err);
+            setLoading(false);
+        }
     };
+    useEffect(() => {
+        fetchData();
+    },[]);
+
+const handleCheckboxChange = (userId)=> {
+    console.log('Checkbox clicked for user ID:', userId);
+    setApprovedUsers((prevApprovedUsers) => ({
+        ...prevApprovedUsers,
+        [userId]:!prevApprovedUsers[userId]
+    }));
+};
+if (loading) {
+    return <div>Loading...</div>
+}
+if (error) {
+    return <div>Error: {error.message}</div>;
+}
     
     return (
-        <div>
-        <Container>
-        <div>
-            <table id="table">
-                <thead>
-                <tr>
-                    <th>First Name</th><th>Last Name</th><th>email</th>
-                    <th>Company</th><th>Approve?</th>
-                </tr>
-                </thead>
-                <tbody>
-                {
-                    users.map((user, index) => (
-                        <tr key={user.id}>
-                        <td>{user.first_name}</td>
-                        <td>{user.last_name}</td>
-                        <td>{user.email}</td>
-                        <td>{user.company}</td>
-                        <th>
-                            <Checkbox
-                                key={user.id}
-                                isChecked={user.checked}
-                                checkHandler={() => updateCheckboxStatus(index)}
-                                label={user.id}
-                                index={index}
-                            />
-                        </th>
-                        </tr>
-                    ))
-                }
-                </tbody>
-            </table>
+       <div className="user-contents">
+        <div className="user-table">
+            <h2>Unapproved Users</h2>
+            <div className="user-cards">
+                {users.map((user) => (
+                    <div className="user-card" key={user.id}>
+                        <div className = "card-header">
+                            <h3>
+                                {`${user.first_name} ${user.last_name}`}
+                            </h3>
+                        </div>
+                        <div className="card-content">
+                            <p>
+                                <strong>Email: </strong>
+                                {user.email}
+                            </p>
+                            <p>
+                                <strong>Phone: </strong>
+                                {user.phone_number}
+                            </p>
+                            <p>
+                                <strong>Company: </strong>
+                                {user.company}
+                            </p>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={approvedUsers[user.id] || false}
+                                    onChange={() => handleCheckboxChange(user.id)}
+                                />
+                                Approve
+                            </label>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
-        </Container>
-        </div>
+       </div>
     );
 };
 
