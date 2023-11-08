@@ -7,6 +7,8 @@ import Login from './components/Login';
 import Register from './components/Register';
 import TestMap from './components/TestMap';
 import Dobor from './components/Dobor';
+import Home from './components/Home';
+import ApproveUsers from './components/ApproveUsers';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
       <div className="routes">
         <Routes>
           <Route path = "/" element={<Landing/>}/>
+          <Route path = "/home" element={<Home/>}/>
+          <Route path ="/approveusers" element={<ApproveUsers/>}/>
           <Route path = "/about" element={<About/>}/>
           <Route path = "/login" element={<Login/>}/>
           <Route path = "/register" element={<Register/>}/>

@@ -1,5 +1,7 @@
 const pg = require("pg");
-
+//const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const config = require("../config/auth.config.js");
 
 const connection = new pg.Pool({
    host: '127.0.0.1',
@@ -9,17 +11,15 @@ const connection = new pg.Pool({
 });
 
 function createUser(request, response) {
-   const firstName = request.body.firstName;
-   const lastName = request.body.lastName;
-   const phoneNumber = request.body.phoneNumber;
+   const first_name = request.body.first_name;
+   const last_name = request.body.last_name;
+   const phone_number = request.body.phone_number;
    const email = request.body.email;
    const password = request.body.password;
    let company = request.body.company;
-   console.log("first name:" + firstName);
-   console.log(company);
-   let sql = "select addUser(" + "'" + firstName + "','" + lastName + 
+   let sql = "select addUser(" + "'" + first_name + "','" + last_name + 
       "','" + company.trim() + "','" + email + "','" + password + "','" + 
-      phoneNumber + "')";
+      phone_number + "')";
    connection.query(sql, function(err, results) {
       if (results.rows[0].adduser > 0) {
          response.status(201).send('User created\n');
@@ -37,8 +37,34 @@ function signin(request, response) {
       "')";
    connection.query(sql, function(err, results) {
       if (results.rows[0].check_id > 0) {
-         response.status(200).send({
-            message: "authenticated"
+         let sql2 = "select * from users where email='" + email + "'";
+         connection.query(sql2,function(err, results2) {
+            const token = jwt.sign(
+               { id: results2.rows[0].id},
+               config.secret,
+               {
+                  algorithm: 'HS256',
+                  allowInsecureKeySizes: true,
+                  expiresIn: 86400, // 24 hours
+               }
+            );
+            const id = results2.rows[0].id;
+            let sql3 = "select * from user_roles_view where uid=" + id;
+            connection.query(sql3, function(err, results3) {
+               let added_roles = [];
+               for (let i = 0; i < results3.rows.length; i++) {
+                  added_roles.push(results3.rows[i].role);
+               }
+               response.status(200).send({
+                  id: id,
+                  first_name: results2.rows[0].first_name,
+                  last_name: results2.rows[0].last_name,
+                  phone_number: results2.rows[0].phone_number,
+                  email: results2.rows[0].email,
+                  roles: added_roles,
+                  accessToken: token
+               });
+            });
          });
       }
       else {

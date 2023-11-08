@@ -40,14 +40,27 @@ const Dobor = () =>{
         debrisDescription:"",
         customDescription:""
     })
-
-    const [reportImages,setReportedImages] = useState([]);
+    const [reportImages,setReportedImages] = useState([]); //Question10
     const [imageCount, setImageCount] = useState(0);
+    const [question11, setQuestion11] = useState(""); //last name
+    const [question12, setQuestion12] = useState(""); //first name
+    const [question13, setQuestion13] = useState(""); //email address
+    const [question14, setQuestion14] = useState("");//confirm email address
+    const [question15, setQuestion15] = useState("");//mailing address
+    const [question16, setQuestion16] = useState("");//city
+    const [question17, setQuestion17] = useState("");//state
+    const [question18, setQuestion18] = useState("");//zip code
+    const [question19, setQuestion19] = useState("");//phone number
+    
     const [errorQuestion1, setErrorQuestion1] = useState(null);
     const [errorQuestion4, setErrorQuestion4] = useState(null);
     const [errorQuestion5, setErrorQuestion5] = useState(null);
     const [errorQuestion7, setErrorQuestion7] = useState(null);
     const [errorQuestion9, setErrorQuestion9] = useState(null);
+    const [errorQuestion11, setErrorQuestion11] = useState(null);
+    const [errorQuestion12, setErrorQuestion12] = useState(null);
+    const [errorQuestion13, setErrorQuestion13] = useState(null);
+    const [errorQuestion14, setErrorQuestion14] = useState(null);
     const [submitted, setSubmitted] = useState(false);
 
     const [showDescriptionTextarea, setShowQuestion5] = useState(false);
@@ -178,24 +191,20 @@ const Dobor = () =>{
 
         for (let i=0; i < imageFiles.length; i++) {
             const file = imageFiles[i];
-        }
-        if(imagesArray.length + imageFiles.length > maxImages) {
-            alert("You can only upload up to 6 images.")
-        }
-        else {
-            for(let i=0; i<imageFiles.length; i++){
-                if (imagesArray.length + i < maxImages){
-                    imagesArray.push(URL.createObjectURL(imageFiles[i]));
-                }
-                else {
-                    break;
-                }
-                
+            if (file.size > maxSizeInBytes){
+                alert("Image size exceeds 30MB. Please choose a smaller image.");
+            }
+            else if (imagesArray.length + i < maxImages) {
+                const imageUrl = URL.createObjectURL(file);
+                imagesArray.push(imageUrl);
+            }
+            else {
+                break;
             }
         }
-        
         setReportedImages(imagesArray);
     }
+
 
     const removeImage = (index) => {
         const updatedImages = [...reportImages];
@@ -203,6 +212,34 @@ const Dobor = () =>{
         setReportedImages(updatedImages);
         setImageCount(imageCount -1)
     };
+
+    const handleQ11InputChange = (event) => {
+        setQuestion11(event.target.value);
+    }
+    const handleQ12InputChange = (event) => {
+        setQuestion12(event.target.value);
+    }
+    const handleQ13InputChange = (event) => {
+        setQuestion13(event.target.value);
+    }
+    const handleQ14InputChange = (event) => {
+        setQuestion14(event.target.value);
+    }
+    const handleQ15InputChange = (event) => {
+        setQuestion15(event.target.value);
+    }
+    const handleQ16InputChange = (event) => {
+        setQuestion16(event.target.value);
+    }
+    const handleQ17InputChange = (event) => {
+        setQuestion17(event.target.value);
+    }
+    const handleQ18InputChange = (event) => {
+        setQuestion18(event.target.value);
+    }
+    const handleQ19InputChange = (event) => {
+        setQuestion19(event.target.value);
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -249,6 +286,34 @@ const Dobor = () =>{
         else {
             setErrorQuestion9(null);
         }
+
+        if (!question11) {
+            setErrorQuestion11("Last name is required");
+        }
+        else {
+            setErrorQuestion11(null);
+        }
+        if (!question12) {
+            setErrorQuestion12("First name is required");
+        }
+        else {
+            setErrorQuestion12(null);
+        }
+        if (!question13) {
+            setErrorQuestion13("Email address is required");
+        }
+        else {
+            setErrorQuestion13(null);
+        }
+        if (!question14) {
+            setErrorQuestion14("You must confirm email address");
+        }
+        else {
+            setErrorQuestion14(null);
+        }
+        if (question13 !== question14) {
+            setErrorQuestion14("Email addresses don't match");
+        }
         let locationOutput = question5.locationOnshore || (question5.locationOffshore !== "" ? question5.locationOffshore : "");
         let output = question1.debrisFound.includes('Other - describe below')
             ? [...question1.debrisFound.filter(option => option !== 'Other - describe below')]
@@ -266,7 +331,18 @@ const Dobor = () =>{
         output += ";" + locationOutput + question5.locationOffshore;
         output += ";" + question6;
         output += ";" + question7.selectedIsland ;
-        output += ";" + question8 + "|"
+        output += ";" + question8;
+        if (question9.selectedOption === 'Other - please explain how urgent recovery/removal is') {
+            output += ","+ question9.customDescription;
+        }
+        else {
+            output += ";" + question9.selectedOption;
+        }
+        output += ";" + reportImages.join(",");
+        output += ";" + question11;
+        output += ";" + question12;
+        output += ";" + question13;
+
         console.log(output);
 
         /*console.log('Question 1 - Other Debris:', question1.otherDebris);
@@ -619,6 +695,45 @@ const Dobor = () =>{
                                 onChange={handleQ10ImageChange}
                                 multiple
                             />
+                            <div className = "newline-label">
+                                11. Your Last Name:
+                            </div>
+                            <textarea
+                                rows="2"
+                                cols="20"
+                                value={question11}
+                                onChange={handleQ11InputChange}
+                            />
+                            <div className = "newline-label">
+                                12. Your First Name:
+                            </div>
+                            <textarea
+                                rows="2"
+                                cols="20"
+                                value={question12}
+                                onChange={handleQ12InputChange}
+                            />
+                            <div className = "newline-label">
+                                13. Your Email Address:
+                            </div>
+                            <textarea
+                                rows="2"
+                                cols="20"
+                                value={question13}
+                                onChange={handleQ13InputChange}
+                            />
+                            {errorQuestion13 && <div className="error-message">{errorQuestion13}</div>}
+                            <div className = "newline-label">
+                                14. Confirm Email Address:
+                            </div>
+                            <textarea
+                                rows="2"
+                                cols="20"
+                                value={question14}
+                                onChange={handleQ14InputChange}
+                            />
+                            {errorQuestion14 && <div className="error-message">{errorQuestion14}</div>}
+
                             <button type="submit">Submit</button>
                         </Form>
                             </Col>
