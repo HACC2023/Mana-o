@@ -109,5 +109,12 @@ function getRemovals(request, response) {
       response.status(200).json(results.rows);
    });
 }
+function approveUsers(request, response) {
+   const user_ids = request.body.approvedUserIds;
+   let sql = 'select update_approved_users(array[' +user_ids +'])';
+   connection.query(sql, function(err, results) {
+      response.status(201).send({message: 'users updated'});
+   });
+}
 module.exports = { createUser, signin, getUsers, getUnapprovedUsers,
-   getDetections, getReporters, getRemovals };
+   getDetections, getReporters, getRemovals, approveUsers };

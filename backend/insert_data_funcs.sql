@@ -97,3 +97,17 @@ create or replace function add_detection(_email text, _debris_type text,
       end;
    $$
    language 'plpgsql';
+   create or replace function update_approved_users(_ids integer[])
+      returns boolean as
+      $$
+         declare
+            _uid integer;
+         begin
+            foreach _uid in array _ids loop
+               update users set approved = true where id=_uid;
+            end loop;
+            return true;
+         end;
+      $$
+      language 'plpgsql';
+   

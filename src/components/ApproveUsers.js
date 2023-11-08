@@ -34,6 +34,29 @@ const handleCheckboxChange = (userId)=> {
         [userId]:!prevApprovedUsers[userId]
     }));
 };
+const approveUsers = async () => {
+    const approvedUserIds = users.filter((user) => approvedUsers[user.id])
+    .map((user) =>user.id);
+    console.log("Approved User IDs:",approvedUserIds);
+
+    if(approvedUserIds.length > 0) {
+        try{
+            const updatedApprovedUsers = {...approvedUsers};
+            approvedUserIds.forEach((userId) => {
+                updatedApprovedUsers[userId] = true;
+            });
+            setApprovedUsers(updatedApprovedUsers);
+
+            await UserService.updatedApprovedStatus(approvedUserIds);
+            await fetchData();
+        }
+        catch (err) {
+            console.error("Error approving users:", err);
+        }
+    }
+}
+
+
 if (loading) {
     return <div>Loading...</div>
 }
@@ -78,6 +101,7 @@ if (error) {
                     </div>
                 ))}
             </div>
+            <button onClick={approveUsers}>Submit</button>
         </div>
        </div>
     );

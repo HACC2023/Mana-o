@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require('body-parser');
 const cors = require("cors");
 const db = require("./queries.js");
 
@@ -6,6 +7,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json());
 
 // parse requests of content-type: application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true}));
@@ -24,6 +26,7 @@ app.get("/", (req, res) => {
 });
 app.get("/users", db.getUsers);
 app.get("/unapprovedusers", db.getUnapprovedUsers);
+app.put("/approveusers", db.approveUsers);
 app.get("/detections", db.getDetections);
 app.get("/removals", db.getRemovals);
 app.post("/users/signup", db.createUser);
