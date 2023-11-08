@@ -11,7 +11,7 @@ const Home = () => {
                 <strong>{currentUser.first_name} {currentUser.last_name}'s</strong> Homepage
             </div>
             <div>
-                <Link to="/approveUsers">Approve Users</Link>
+                <Link to="/unapprovedusers">Approve Users</Link>
             </div>
         </div>
 
