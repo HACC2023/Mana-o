@@ -161,27 +161,28 @@ app.post("/changepassword", (req, res) => {
 app.post("/sendEmailToApprovedUsers", (req, res) => {
     const { approvedUserEmails } = req.body;
     if (approvedUserEmails.length > 0) {
-        const mailOptions = {
-            from: "feimeichen666@gmail.com",
-            to: approvedUserEmails,
-            subject: "Your Approval Confirmation",
-            text: "You have been approved as a user.",
-            html: "<p>You have been approved as a user.</p>",
-        };
+        approvedUserEmails.forEach((email) => {
+            const mailOptions = {
+                from: 'feimeichen666@gmail.com',
+                to: email,
+                subject: 'Your Approval Confirmation',
+                text: 'You have been approved as a user.',
+                html: '<p>You have been approved as a user.</p>',
+            };
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log(error);
+                    return res.status(500).json({error: "Failed to send email"});
+                }
 
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log(error);
-                return res.status(500).json({ error: "Failed to send email" });
-            }
-
-            if (info && info.response) {
-                console.log("Email sent: " + info.response);
-                res.status(200).json({ message: "Email sent successfully" });
-            } else {
-                console.log("Email sent, but no info.response available");
-                res.status(200).json({ message: "Email sent successfully" });
-            }
+                if (info && info.response) {
+                    console.log(`Email sent to ${email}: ${info.response}`);
+                    res.status(200).json({message: "Email sent successfully"});
+                } else {
+                    console.log(`Email sent to ${email}, but no info.response available`);
+                    res.status(200).json({message: "Email sent successfully"});
+                }
+            });
         });
     } else {
         res.status(400).json({ message: "No approved users found" });
