@@ -5,8 +5,8 @@ const config = require("../config/auth.config.js");
 
 const connection = new pg.Pool({
    host: '127.0.0.1',
-   user: 'taryn',
-   password: 'tarynpass',
+   user: 'feimei',
+   password: 'feimei',
    database: 'honua'
 });
 
@@ -116,5 +116,38 @@ function approveUsers(request, response) {
       response.status(201).send({message: 'users updated'});
    });
 }
+
+function checkExist(email, callback) {
+   const sql = 'SELECT email FROM users WHERE email = $1';
+
+   connection.query(sql, [email], function(err, results) {
+      if (err) {
+         console.error(err);
+         callback(false, err);
+      } else {
+         const exists = results.rows.length > 0;
+         callback(exists, null);
+      }
+   });
+}
+function updatePassword(request, response) {
+   const email = request.body.email;
+   const newPassword = request.body.newPassword;
+   console.log(email);
+   //const hashedPassword = bcrypt.hashSync(newPassword, 10);
+
+   const sql = 'UPDATE users SET password = $1 WHERE email = $2';
+   connection.query(sql, [newPassword, email], function (err, results) {
+
+      if (err) {
+         console.error(err);
+         response.status(500).json({ error: 'An error occurred' });
+      } else {
+         response.status(200).json({ message: 'Password updated successfully' });
+      }
+   });
+}
+
+
 module.exports = { createUser, signin, getUsers, getUnapprovedUsers,
-   getDetections, getReporters, getRemovals, approveUsers };
+   getDetections, getReporters, getRemovals, approveUsers, checkExist, updatePassword };

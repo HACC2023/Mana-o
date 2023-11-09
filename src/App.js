@@ -9,26 +9,28 @@ import TestMap from './components/TestMap';
 import Dobor from './components/Dobor';
 import Home from './components/Home';
 import ApproveUsers from './components/ApproveUsers';
+import ForgotPassword from './components/ForgotPassword';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-      </header>
-      <div className="routes">
-        <Routes>
-          <Route path = "/" element={<Landing/>}/>
-          <Route path = "/home" element={<Home/>}/>
-          <Route path ="/unapprovedusers" element={<ApproveUsers/>}/>
-          <Route path = "/about" element={<About/>}/>
-          <Route path = "/login" element={<Login/>}/>
-          <Route path = "/register" element={<Register/>}/>
-          <Route path = "/testmap" element={<TestMap/>}/>
-          <Route path = "/dobor" element={<Dobor/>}/>
-        </Routes>
-      </div>
-    </div>
-  );
+    return (
+        <div className="App">
+            <header className="App-header">
+            </header>
+            <div className="routes">
+                <Routes>
+                    <Route path="/" element={<Landing/>}/>
+                    <Route path="/home" element={<Home/>}/>
+                    <Route path="/unapprovedusers" element={<ApproveUsers/>}/>
+                    <Route path="/about" element={<About/>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/register" element={<Register/>}/>
+                    <Route path="/testmap" element={<TestMap/>}/>
+                    <Route path="/dobor" element={<Dobor/>}/>
+                    <Route path="/forgotpassword" element={<ForgotPassword/>}/>
+                </Routes>
+            </div>
+        </div>
+    );
 }
 
 export default App;
