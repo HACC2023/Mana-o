@@ -41,6 +41,7 @@ const Dobor = () =>{
         customDescription:""
     })
     const [reportImages,setReportedImages] = useState([]); //Question10
+    const [imageFileNames,setImageFileNames] = useState([]); //Question10
     const [imageCount, setImageCount] = useState(0);
     const [question11, setQuestion11] = useState(""); //last name
     const [question12, setQuestion12] = useState(""); //first name
@@ -188,6 +189,7 @@ const Dobor = () =>{
         const imagesArray = [...reportImages];
         const maxImages = 6;
         const maxSizeInBytes = 30 * 1024 * 1024; //30MB
+        const fileNamesArray = [...imageFileNames];
 
         for (let i=0; i < imageFiles.length; i++) {
             const file = imageFiles[i];
@@ -197,12 +199,14 @@ const Dobor = () =>{
             else if (imagesArray.length + i < maxImages) {
                 const imageUrl = URL.createObjectURL(file);
                 imagesArray.push(imageUrl);
+                fileNamesArray.push(file.name);
             }
             else {
                 break;
             }
         }
         setReportedImages(imagesArray);
+        setImageFileNames(fileNamesArray);
     }
 
 
@@ -338,11 +342,15 @@ const Dobor = () =>{
         else {
             output += ";" + question9.selectedOption;
         }
-        output += ";" + reportImages.join(",");
+        output += ";" + imageFileNames;
         output += ";" + question11;
         output += ";" + question12;
         output += ";" + question13;
-
+        output += ";" + question15;
+        output += ";" + question16;
+        output += ";" + question17;
+        output += ";" + question18;
+        output += ";" + question19;
         console.log(output);
 
         /*console.log('Question 1 - Other Debris:', question1.otherDebris);
@@ -433,7 +441,7 @@ const Dobor = () =>{
                             <Col md={9} className="d-flex align-items-center">
                             <Form onSubmit = {handleSubmit} id="doborQ">
                             <div className="newline-label">
-                                <label>1. I found/located the following:</label>
+                                <label>1. I found/located the following:<span className="text-danger">*</span></label>
                             </div>
                             {debrisTypeOptions.map((option, index) => (
                                 <div key={index} className="newline-label">
@@ -497,6 +505,7 @@ const Dobor = () =>{
                             <div className = "newline-label">
                                 <label>
                                     3. Did you find a boat? If yes, do you want to claim it for personal use?
+                                    <span className="text-danger">*</span>
                                 </label>
                             </div>
                             {question1.debrisFound.includes(debrisTypeOptions[1]) ? (
@@ -531,6 +540,7 @@ const Dobor = () =>{
                                     4. On a scale of one to ten (one represents no marine growth and ten
                                     represents significant marine life covering all submerged surfaces)
                                     how much biofouling is on the item you found?
+                                    <span className="text-danger">*</span>
                                 </label>
                             </div>
                             <div className="newline-label">
@@ -555,6 +565,7 @@ const Dobor = () =>{
                             <div className="newline-label">
                                 <label>
                                     5. This debris is located:
+                                    <span className="text-danger">*</span>
                                 </label>
                             </div>
                             {locationOptions.map((option,index) => (
@@ -596,7 +607,9 @@ const Dobor = () =>{
                             )}
                             <div className="newline-label">
                                 <label>6. Enter latitude and longitude (i.e. 21.3161 -157.8906)
-                                    or provide a position description and any information on currents and winds that could help in relocating the debris.</label>
+                                    or provide a position description and any information on currents and winds that could help in relocating the debris.
+                                    <span className="text-danger">*</span>
+                                </label>
                             </div>
                             <textarea
                                 rows="2"
@@ -607,6 +620,7 @@ const Dobor = () =>{
                             <div className="newline-label">
                                 <label>
                                     7. If on land or in the nearshore waters - indicate which island
+                                    <span className="text-danger">*</span>
                                 </label>
                             </div>
                             <div className="newline-label">
@@ -628,7 +642,7 @@ const Dobor = () =>{
                             </div>
                             {errorQuestion7 && <div className="alert alert-danger" role="alert">{errorQuestion7}</div>}
                             <div className="newline-label">
-                                <label>8. Nearest town, street address, nearby landmarks:</label>
+                                <label>8. Nearest town, street address, nearby landmarks:<span className="text-danger">*</span></label>
                                 <br/>
                                 <textarea
                                     rows="4"
@@ -640,6 +654,7 @@ const Dobor = () =>{
                             <div className="newline-label">
                                 <label>
                                     9. The debris is best described as:
+                                    <span className="text-danger">*</span>
                                 </label>
                             </div>
                             {debrisDescription.map((option,index) => (
@@ -696,7 +711,7 @@ const Dobor = () =>{
                                 multiple
                             />
                             <div className = "newline-label">
-                                11. Your Last Name:
+                                <label>11. Your Last Name:<span className="text-danger">*</span></label>
                             </div>
                             <textarea
                                 rows="2"
@@ -705,7 +720,7 @@ const Dobor = () =>{
                                 onChange={handleQ11InputChange}
                             />
                             <div className = "newline-label">
-                                12. Your First Name:
+                                <label>12. Your First Name:<span className="text-danger">*</span></label>
                             </div>
                             <textarea
                                 rows="2"
@@ -714,7 +729,7 @@ const Dobor = () =>{
                                 onChange={handleQ12InputChange}
                             />
                             <div className = "newline-label">
-                                13. Your Email Address:
+                                <label>13. Your Email Address:<span className="text-danger">*</span></label>
                             </div>
                             <textarea
                                 rows="2"
@@ -724,7 +739,7 @@ const Dobor = () =>{
                             />
                             {errorQuestion13 && <div className="error-message">{errorQuestion13}</div>}
                             <div className = "newline-label">
-                                14. Confirm Email Address:
+                                <label>14. Confirm Email Address:<span className="text-danger">*</span></label>
                             </div>
                             <textarea
                                 rows="2"
@@ -732,8 +747,53 @@ const Dobor = () =>{
                                 value={question14}
                                 onChange={handleQ14InputChange}
                             />
-                            {errorQuestion14 && <div className="error-message">{errorQuestion14}</div>}
-
+                            {errorQuestion14 && <div className="error-message" role="alert">{errorQuestion14}</div>}
+                            <div className = "newline-label">
+                            <label>15. Your mailing address (optional):</label>
+                            </div>
+                            <textarea
+                                rows="2"
+                                cols="20"
+                                value={question15}
+                                onChange={handleQ15InputChange}
+                            />
+                            <div className = "newline-label">
+                            <label>16. Your city (optional):</label>
+                            </div>
+                            <textarea
+                                rows="2"
+                                cols="20"
+                                value={question16}
+                                onChange={handleQ16InputChange}
+                            />
+                            <div className = "newline-label">
+                            <label>17. Your state (optional):</label>
+                            </div>
+                            <textarea
+                                rows="2"
+                                cols="20"
+                                value={question17}
+                                onChange={handleQ17InputChange}
+                            />
+                            <div className = "newline-label">
+                            <label>18. Your zip code (optional):</label>
+                            </div>
+                            <textarea
+                                rows="2"
+                                cols="20"
+                                value={question18}
+                                onChange={handleQ18InputChange}
+                            />
+                            <div className = "newline-label">
+                            <label>19. Your phone number (with area code):<span className="text-danger">*</span></label>
+                            </div>
+                            <textarea
+                                rows="2"
+                                cols="20"
+                                value={question19}
+                                onChange={handleQ19InputChange}
+                            />
+                            
                             <button type="submit">Submit</button>
                         </Form>
                             </Col>
