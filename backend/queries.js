@@ -74,7 +74,7 @@ function signin(request, response) {
 }
 
 function getUsers(request, response) {
-   let sql = 'select id, first_name, last_name, company, email, ' + 
+   let sql = 'select id, first_name, last_name, company, email, ' +
       'phone_number from users where approved=true';
    connection.query(sql, function(err, results) {
       response.status(200).json(results.rows);
@@ -130,20 +130,15 @@ function checkExist(email, callback) {
       }
    });
 }
-function updatePassword(request, response) {
-   const email = request.body.email;
-   const newPassword = request.body.newPassword;
-   console.log(email);
-   //const hashedPassword = bcrypt.hashSync(newPassword, 10);
-
+function updatePassword(email, newPassword, callback) {
    const sql = 'UPDATE users SET password = $1 WHERE email = $2';
-   connection.query(sql, [newPassword, email], function (err, results) {
 
-      if (err) {
-         console.error(err);
-         response.status(500).json({ error: 'An error occurred' });
+   connection.query(sql, [newPassword, email], (error, results) => {
+      if (error) {
+         console.error(error);
+         callback(false, error);
       } else {
-         response.status(200).json({ message: 'Password updated successfully' });
+         callback(true, null);
       }
    });
 }
