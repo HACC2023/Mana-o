@@ -60,15 +60,17 @@ function ForgotPassword() {
     };
 
     return (
-        <div className="centered-card centered">
-            <div className="card">
-                <h2 className= "title">Reset your password</h2>
+        <div className="forgot-password-container">
+            <div className="forgot-password-card">
+            <img src="/images/ForgotPassword.jpeg" alt="forgot-password-img" width="50%" height="50%"/>
+                <h2 className= "forgot-password-title">Reset your password</h2>
                 {step === 1 && (
                     <div>
                         <p>
                             Enter your user account's verified email address and we will send you verfication code.
                         </p>
                         <input
+                            className="forgot-password-input"
                             type="email"
                             placeholder="Enter Email"
                             value={email}
@@ -81,6 +83,7 @@ function ForgotPassword() {
                 {step === 2 && (
                     <div>
                         <input
+                            className="forgot-password-input"
                             type="text"
                             placeholder="Enter Verification Code"
                             value={verificationCode}
@@ -93,6 +96,7 @@ function ForgotPassword() {
                 {step === 3 && (
                     <div>
                         <input
+                            className="forgot-password-input"
                             type="password"
                             placeholder="New Password"
                             value={newPassword}
@@ -100,13 +104,14 @@ function ForgotPassword() {
                         />
                         <br/>
                         <input
+                            className="forgot-password-input"
                             type="password"
                             placeholder="Confirm Password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
                         <br/>
-                        <button className="btn btn-primary custom-button" onClick={resetPassword}>Reset Password</button>
+                        <button className="forgot-password-custom-button" onClick={resetPassword}>Reset Password</button>
                     </div>
                 )}
                 {step === 4 && (
