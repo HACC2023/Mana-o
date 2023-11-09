@@ -25,6 +25,7 @@ function App() {
           <Route path = "/register" element={<Register/>}/>
           <Route path = "/testmap" element={<TestMap/>}/>
           <Route path = "/dobor" element={<Dobor/>}/>
+          <Route path = "forgotpassword" element =></Route>
         </Routes>
       </div>
     </div>
