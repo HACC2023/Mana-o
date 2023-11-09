@@ -117,13 +117,13 @@ function approveUsers(request, response) {
    });
 }
 
-function checkExist(request, response) {
-   let sql = 'SELECT email FROM users WHERE approved = true';
-   connection.query(sql, function(err, results) {
-      response.status(200).json(results.rows);
-   });
-}
+// function checkExist(request, response) {
+//    let sql = 'SELECT email FROM users WHERE approved = true';
+//    connection.query(sql, function(err, results) {
+//       response.status(200).json(results.rows);
+//    });
+// }
 
 
 module.exports = { createUser, signin, getUsers, getUnapprovedUsers,
-   getDetections, getReporters, getRemovals, approveUsers, checkExist };
+   getDetections, getReporters, getRemovals, approveUsers };

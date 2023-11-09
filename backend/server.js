@@ -32,7 +32,6 @@ app.get("/detections", db.getDetections);
 app.get("/removals", db.getRemovals);
 app.post("/users/signup", db.createUser);
 app.post("/users/signin", db.signin);
-app.post("/users/email", db.checkExist);
 
 app.listen(8080, () => {
     console.log("Server running on port 8080");
@@ -61,10 +60,14 @@ app.get("/rest",(req,res) =>{
 // Define a route to send an email
 const verificationCodes = {};
 
-app.post("/reset", (req, res) => {
-    const verificationCode = generateVerificationCode();
+app.post("/reset", async(req, res) => {
+
+    users = db.getUsers;
     const { email } = req.body;
+    //const exsit = db.checkExist();
+    const verificationCode = generateVerificationCode();
     verificationCodes[email] = verificationCode;
+
 
     const mailOptions = {
         from: "feimeichen666@gmail.com",
