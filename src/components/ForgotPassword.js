@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './ForgotPassword.css';
+import { useNavigate } from "react-router-dom";
 
 function ForgotPassword() {
     const [email, setEmail] = useState('');
@@ -9,6 +10,10 @@ function ForgotPassword() {
     const [confirmPassword, setConfirmPassword] = useState(''); // New state variable
     const [message, setMessage] = useState('');
     const [step, setStep] = useState(1);
+    let navigate = useNavigate();
+    const handleLoginClick = () => {
+        navigate('/login');
+    };
 
     const sendVerificationCode = () => {
         axios
@@ -115,9 +120,12 @@ function ForgotPassword() {
                     </div>
                 )}
                 {step === 4 && (
-                    <div>
-                        <p>Password reset successful!</p>
-                    </div>
+                   <div>
+                    <p>Now you can login with new passowrd</p>
+                    <button className="forgot-password-custom-button" onClick={handleLoginClick}>
+                        Login
+                    </button>
+                   </div>
                 )}
                 {message && <div>{message}</div>}
             </div>
