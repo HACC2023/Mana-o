@@ -132,13 +132,13 @@ const Login = () => {
                                             </div>
                                         </div>
                                     )}
-                                    <span className="mt-2 mb-2">
+                                    <span className="mt-2 mb-2"  style={{ color: "black" }}>
                                         Don't have an account? <Link to="/register">Register</Link>
                                     </span>
 
-                                    <a href="#" className="mb-4" style={{ color: "red" }}>
+                                    <Link to="/forgotpassword" className="mb-4" style={{ color: "red" }}>
                                         Forgot Password?
-                                    </a>
+                                    </Link>
                                 </form>
                             </Col>
                         </Row>

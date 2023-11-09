@@ -32,6 +32,7 @@ app.get("/detections", db.getDetections);
 app.get("/removals", db.getRemovals);
 app.post("/users/signup", db.createUser);
 app.post("/users/signin", db.signin);
+app.post("/users/email", db.checkExist);
 
 app.listen(8080, () => {
     console.log("Server running on port 8080");
