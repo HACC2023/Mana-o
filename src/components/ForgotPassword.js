@@ -46,7 +46,7 @@ function ForgotPassword() {
         }
 
         axios
-            .post('http://localhost:8080/resetPassword', {
+            .post('http://localhost:8080/changepassword', {
                 email,
                 newPassword,
             })

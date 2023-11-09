@@ -53,40 +53,86 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-app.get("/rest",(req,res) =>{
-    console.log(re.body);
+app.post("/reset", (req, res) => {
+    const { email } = req.body;
+    console.log(email);
+
+    db.checkExist(email, function(exists) {
+        if (exists) {
+            const verificationCode = generateVerificationCode();
+            verificationCodes[email] = verificationCode;
+            console.log(verificationCode);
+            const mailOptions = {
+                from: "feimeichen666@gmail.com",
+                to: email,
+                subject: "Reset Password",
+                text: 'Your verification code is: ' + verificationCode,
+                html: '<p>Your verification code is: ' + verificationCode + '</p>'
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log(error);
+                    return res.status(500).json({ error: "Failed to send email" });
+                }
+
+                if (info && info.response) {
+                    console.log("Email sent: " + info.response);
+                    res.status(200).json({ message: "Email sent successfully" });
+                } else {
+                    console.log("Email sent, but no info.response available");
+                    res.status(200).json({ message: "Email sent successfully" });
+                }
+            });
+        } else {
+            console.log("Email not found");
+            res.status(400).json({ message: "Email not found" });
+        }
+    });
 });
+
 
 // Define a route to send an email
 const verificationCodes = {};
 
-app.post("/reset", async(req, res) => {
-
-    users = db.getUsers;
+app.post("/reset", (req, res) => {
     const { email } = req.body;
-    //const exsit = db.checkExist();
-    const verificationCode = generateVerificationCode();
-    verificationCodes[email] = verificationCode;
+    console.log(email);
 
+    db.checkExist(email, function(exists) {
+        if (exists) {
+            const verificationCode = generateVerificationCode();
+            verificationCodes[email] = verificationCode;
 
-    const mailOptions = {
-        from: "feimeichen666@gmail.com",
-        to: email,
-        subject: "Reset Password",
-        text: 'Your verification code is:' + verificationCode,
-        html: '<p>Your verification code is:</p>' + verificationCode
-    };
+            const mailOptions = {
+                from: "feimeichen666@gmail.com",
+                to: email,
+                subject: "Reset Password",
+                text: 'Your verification code is: ' + verificationCode,
+                html: '<p>Your verification code is: ' + verificationCode + '</p>'
+            };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log(error);
-            res.status(500).json({ error: "Failed to send email" });
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.log(error);
+                    return res.status(500).json({ error: "Failed to send email" });
+                }
+
+                if (info && info.response) {
+                    console.log("Email sent: " + info.response);
+                    res.status(200).json({ message: "Email sent successfully" });
+                } else {
+                    console.log("Email sent, but no info.response available");
+                    res.status(200).json({ message: "Email sent successfully" });
+                }
+            });
         } else {
-            console.log("Email sent: " + info.response);
-            res.status(200).json({ message: "Email sent successfully" });
+            res.status(400).json({ message: "Email not found" });
         }
     });
 });
+
+
 
 app.post("/verify", (req, res) => {
     const { email, code } = req.body;
@@ -96,4 +142,18 @@ app.post("/verify", (req, res) => {
     } else {
         res.status(400).json({ message: "Verification failed" });
     }
+});
+
+app.post("/changepassword", (req, res) => {
+    const { email, newPassword } = req.body;
+    console.log(email);
+    console.log(newPassword)
+
+    db.updatePassword(email, newPassword, (success, error) => {
+        if (success) {
+            res.status(200).json({ message: "Password updated successfully" });
+        } else {
+            res.status(500).json({ error: "An error occurred" });
+        }
+    });
 });
