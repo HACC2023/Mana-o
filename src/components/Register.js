@@ -5,6 +5,7 @@ import { isEmail } from "validator";
 import { Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import "./Register.css";
+import axios from 'axios';
 
 import AuthService from "../services/auth.service";
 
@@ -158,6 +159,20 @@ const Register = () => {
         setCompany(company);
 
     }
+    const sendEmail = (email) => {
+        axios
+            .post('http://localhost:8080/sendRegisterEmail', {
+                email, // Pass the array of email addresses
+            })
+            .then((response) => {
+                console.log(response.data.message);
+                setMessage(response.data.message);
+            })
+            .catch((error) => {
+                console.log(error.response.data.message);
+                setMessage(error.response.data.message);
+            });
+    };
 
     const handleRegister = (e) => {
         e.preventDefault();
@@ -177,6 +192,7 @@ const Register = () => {
                         console.log("user data:", response.data.user);
                     }
                     setSuccessful(true);
+                    sendEmail(email);
                     navigate("/login");
                 },
                 (error) => {
