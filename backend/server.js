@@ -53,43 +53,6 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-app.post("/reset", (req, res) => {
-    const { email } = req.body;
-    console.log(email);
-
-    db.checkExist(email, function(exists) {
-        if (exists) {
-            const verificationCode = generateVerificationCode();
-            verificationCodes[email] = verificationCode;
-            const mailOptions = {
-                from: "feimeichen666@gmail.com",
-                to: email,
-                subject: "Reset Password",
-                text: 'Your verification code is: ' + verificationCode,
-                html: '<p>Your verification code is: ' + verificationCode + '</p>'
-            };
-
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    return res.status(500).json({ error: "Failed to send email" });
-                }
-
-                if (info && info.response) {
-                    console.log("Email sent: " + info.response);
-                    res.status(200).json({ message: "Email sent successfully" });
-                } else {
-                    console.log("Email sent, but no info.response available");
-                    res.status(200).json({ message: "Email sent successfully" });
-                }
-            });
-        } else {
-            console.log("Email not found");
-            res.status(400).json({ message: "Email not found" });
-        }
-    });
-});
-
-
 // Define a route to send an email
 const verificationCodes = {};
 
@@ -117,10 +80,10 @@ app.post("/reset", (req, res) => {
 
                 if (info && info.response) {
                     console.log("Email sent: " + info.response);
-                    res.status(200).json({ message: "Email sent successfully" });
+                    res.status(200).json({ message: "Validation code has been sent to your email" });
                 } else {
                     console.log("Email sent, but no info.response available");
-                    res.status(200).json({ message: "Email sent successfully" });
+                    res.status(200).json({message: "Validation code has been sent to your email"});
                 }
             });
         } else {

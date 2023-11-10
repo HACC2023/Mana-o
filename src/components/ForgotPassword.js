@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import './ForgotPassword.css';
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 function ForgotPassword() {
     const [email, setEmail] = useState('');
@@ -10,12 +10,16 @@ function ForgotPassword() {
     const [confirmPassword, setConfirmPassword] = useState(''); // New state variable
     const [message, setMessage] = useState('');
     const [step, setStep] = useState(1);
+    const [isSendButtonDisabled, setIsSendButtonDisabled] = useState(false);
+    const [sendButtonText, setSendButtonText] = useState("Send Verification Code");
     let navigate = useNavigate();
     const handleLoginClick = () => {
         navigate('/login');
     };
 
     const sendVerificationCode = () => {
+        setIsSendButtonDisabled(true);
+        setSendButtonText("Sending...");
         axios
             .post('http://localhost:8080/reset', {
                 email,
@@ -26,6 +30,10 @@ function ForgotPassword() {
             })
             .catch((error) => {
                 setMessage(error.response.data.message);
+            })
+            .finally(() => {
+                setIsSendButtonDisabled(false);
+                setSendButtonText("Send Verification Code");
             });
     };
 
@@ -67,8 +75,8 @@ function ForgotPassword() {
     return (
         <div className="forgot-password-container">
             <div className="forgot-password-card">
-            <img src="/images/ForgotPassword.jpeg" alt="forgot-password-img" width="50%" height="50%"/>
-                <h2 className= "forgot-password-title">Reset your password</h2>
+                <img src="/images/ForgotPassword.jpeg" alt="forgot-password-img" width="50%" height="50%"/>
+                <h2 className="forgot-password-title">Reset your password</h2>
                 {step === 1 && (
                     <div>
                         <p>
@@ -82,7 +90,9 @@ function ForgotPassword() {
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <br/>
-                        <button className="btn btn-primary custom-button"  onClick={sendVerificationCode}>Send Verification Code</button>
+                        <button className="btn btn-primary custom-button send-verification-button"
+                                onClick={sendVerificationCode} disabled={isSendButtonDisabled}>  {sendButtonText}
+                        </button>
                     </div>
                 )}
                 {step === 2 && (
@@ -100,6 +110,7 @@ function ForgotPassword() {
                 )}
                 {step === 3 && (
                     <div>
+                        <p>Enter your new password</p>
                         <input
                             className="forgot-password-input"
                             type="password"
@@ -116,16 +127,17 @@ function ForgotPassword() {
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
                         <br/>
-                        <button className="forgot-password-custom-button" onClick={resetPassword}>Reset Password</button>
+                        <button className="forgot-password-custom-button" onClick={resetPassword}>Reset Password
+                        </button>
                     </div>
                 )}
                 {step === 4 && (
-                   <div>
-                    <p>Now you can login with new passowrd</p>
-                    <button className="forgot-password-custom-button" onClick={handleLoginClick}>
-                        Login
-                    </button>
-                   </div>
+                    <div>
+                        <p>Now you can login with new passowrd</p>
+                        <button className="forgot-password-custom-button" onClick={handleLoginClick}>
+                            Login
+                        </button>
+                    </div>
                 )}
                 {message && <div>{message}</div>}
             </div>
