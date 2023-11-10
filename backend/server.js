@@ -61,7 +61,6 @@ app.post("/reset", (req, res) => {
         if (exists) {
             const verificationCode = generateVerificationCode();
             verificationCodes[email] = verificationCode;
-            console.log(verificationCode);
             const mailOptions = {
                 from: "feimeichen666@gmail.com",
                 to: email,
@@ -72,7 +71,6 @@ app.post("/reset", (req, res) => {
 
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                    console.log(error);
                     return res.status(500).json({ error: "Failed to send email" });
                 }
 
@@ -97,7 +95,6 @@ const verificationCodes = {};
 
 app.post("/reset", (req, res) => {
     const { email } = req.body;
-    console.log(email);
 
     db.checkExist(email, function(exists) {
         if (exists) {
@@ -146,8 +143,6 @@ app.post("/verify", (req, res) => {
 
 app.post("/changepassword", (req, res) => {
     const { email, newPassword } = req.body;
-    console.log(email);
-    console.log(newPassword)
 
     db.updatePassword(email, newPassword, (success, error) => {
         if (success) {
@@ -157,6 +152,7 @@ app.post("/changepassword", (req, res) => {
         }
     });
 });
+
 
 app.post("/sendEmailToApprovedUsers", (req, res) => {
     const { approvedUserEmails } = req.body;

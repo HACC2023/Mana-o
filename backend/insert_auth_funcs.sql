@@ -76,3 +76,30 @@ create or replace function check_id(_email text, _pass text)
       end;
    $$
    language 'plpgsql';
+
+CREATE OR REPLACE FUNCTION update_password(_email text, _newPassword text)
+RETURNS integer AS
+$$
+DECLARE
+rec record;
+   _uid integer;
+   _salt text;
+   _hash text;
+   _sql text;
+BEGIN
+SELECT * INTO rec FROM users WHERE email = _email AND approved = true;
+
+IF NOT FOUND THEN
+      RETURN -1;
+END IF;
+
+   _salt := gen_salt('bf', 8);
+   _hash := crypt(_newPassword, _salt);
+
+   _sql := 'UPDATE users SET password = ' || quote_literal(_hash) || ' WHERE email = ' || quote_literal(_email);
+EXECUTE _sql;
+
+RETURN 1;
+END;
+$$
+LANGUAGE 'plpgsql';

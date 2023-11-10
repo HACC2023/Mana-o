@@ -1,5 +1,4 @@
 const pg = require("pg");
-//const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("../config/auth.config.js");
 
@@ -131,14 +130,22 @@ function checkExist(email, callback) {
    });
 }
 function updatePassword(email, newPassword, callback) {
-   const sql = 'UPDATE users SET password = $1 WHERE email = $2';
-
-   connection.query(sql, [newPassword, email], (error, results) => {
+   const sql = 'SELECT update_password($1, $2)';
+   connection.query(sql, [email, newPassword], (error, results) => {
       if (error) {
          console.error(error);
          callback(false, error);
       } else {
-         callback(true, null);
+
+         const resultCode = results.rows[0].update_password;
+         if (resultCode === 1) {
+            callback(true, null);
+         } else if (resultCode === -1) {
+            callback(false, 'User not found or not approved');
+         } else {
+            console.log("good!");
+            callback(false, 'Password update failed');
+         }
       }
    });
 }
