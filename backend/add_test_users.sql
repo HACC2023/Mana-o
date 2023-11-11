@@ -3,7 +3,7 @@ select addUser('Taryn', 'Takebayashi', 'none', 'tarynet@hawaii.edu',
 update users set approved = true where id=1;
 insert into user_role (user_id, role_id) values (1,1);
 
-select addUser('Jane', 'Doe', 'ABC Company', 'janedoe@gmail.com',
+select addUser('Jane', 'Doe', 'ABC Company', 'tetaryn@gmail.com',
    'janey', '000-123-4567');
-select addUser('John', 'Smith', 'Aloha Divers', 'johnsmith.com', 
+select addUser('John', 'Smith', 'Aloha Divers', 'taryn.takebayashi@gmail.com', 
    'johnny', '000-234-5678');
