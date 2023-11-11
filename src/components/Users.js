@@ -12,12 +12,14 @@ const Users = () => {
     const [userIdToDelete, setUserIdToDelete] = useState(null);
     const [userIdToEdit, setUserIdToEdit] = useState(null);
     const [userToDelete, setUserToDelete] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
     const [editFormData, setEditFormData] = useState({
         firstName: '',
         lastName: '',
         email: '',
         phoneNumber: '',
         company: '',
+        role: 'user', // default role
     });
 
     const fetchData = async () => {
@@ -37,8 +39,6 @@ const Users = () => {
         fetchData();
     }, []);
 
-
-
     const handleEditClick = (userId) => {
         setUserIdToEdit(userId);
         setShowEditModal(true);
@@ -51,12 +51,14 @@ const Users = () => {
                 email: userToEdit.email,
                 phoneNumber: userToEdit.phone_number,
                 company: userToEdit.company,
+                role: userToEdit.role || 'user', // default to 'user' if role is not present
             });
         }
     };
 
     const handleEditSave = () => {
         console.log(`Save edited data for user with ID: ${userIdToEdit}`, editFormData);
+        // Add logic to save the edited data
         setShowEditModal(false);
     };
 
@@ -68,6 +70,7 @@ const Users = () => {
             email: '',
             phoneNumber: '',
             company: '',
+            role: 'user', // default role
         });
         setShowEditModal(false);
     };
@@ -89,6 +92,7 @@ const Users = () => {
 
     const handleDeleteConfirm = () => {
         console.log(`Confirmed delete for user with ID: ${userIdToDelete}`);
+        // Add logic to confirm and delete the user
         setShowDeleteModal(false);
     };
 
@@ -97,14 +101,41 @@ const Users = () => {
         setUserIdToDelete(null);
         setShowDeleteModal(false);
     };
+    const filteredUsers = users.filter((user) => {
+        const fullName = `${user.first_name} ${user.last_name}`.toLowerCase();
+        const role = user.roles.includes('admin')?'admin':'user';
+        const email = user.email.toLowerCase();
+        const company = user.company.toLowerCase();
+        const phoneNumber = user.phone_number.toLowerCase();
 
+        return (
+            fullName.includes(searchQuery.toLowerCase()) ||
+            role.includes(searchQuery.toLowerCase()) ||
+            email.includes(searchQuery.toLowerCase()) ||
+            company.includes(searchQuery.toLowerCase()) ||
+            phoneNumber.includes(searchQuery.toLowerCase())
+        );
+    });
     return (
         <Container>
             <h2 className="mt-5 mb-4">Users</h2>
             {users.length > 0 ? (
                 <div>
+                    <Row className="mb-5">
+                        <Col md={{ span: 3, offset: 9}}>
+                            <Form.Group controlId="formSearch">
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Search for users..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    {filteredUsers.length > 0 ? (
                     <Row>
-                        {users.map((user) => (
+                        {filteredUsers.map((user) => (
                             <Col key={user.id} md={4} className="mb-3">
                                 <Card style={{ width: '24rem' }}>
                                     <Card.Header className="header-bg">
@@ -114,6 +145,7 @@ const Users = () => {
                                         <Card.Text>Email: {user.email}</Card.Text>
                                         <Card.Text>Phone: {user.phone_number}</Card.Text>
                                         <Card.Text>Company: {user.company}</Card.Text>
+                                        <Card.Text>Role: <b>{user.roles.includes('admin') ? 'Admin' : 'User'}</b></Card.Text>
                                         <div className="d-flex justify-content-end">
                                             <Button variant="primary" style={{ marginRight: '10px' }} onClick={() => handleEditClick(user.id)}>
                                                 Edit
@@ -126,7 +158,13 @@ const Users = () => {
                                 </Card>
                             </Col>
                         ))}
-                    </Row>
+                    </Row>): (
+                        <div>
+                            <Alert variant="info" className="mt-5">
+                                No matching users
+                            </Alert>
+                        </div>
+                    )}
                     {/* Edit Modal */}
                     <Modal show={showEditModal} onHide={handleEditCancel}>
                         <Modal.Header closeButton>
@@ -184,6 +222,18 @@ const Users = () => {
                                         onChange={handleEditFormChange}
                                     />
                                 </Form.Group>
+                                <Form.Group controlId="formRole">
+                                    <Form.Label>Role</Form.Label>
+                                    <Form.Control
+                                        as="select"
+                                        name="role"
+                                        value={editFormData.role}
+                                        onChange={handleEditFormChange}
+                                    >
+                                        <option value="user">User</option>
+                                        <option value="admin">Admin</option>
+                                    </Form.Control>
+                                </Form.Group>
                             </Form>
                         </Modal.Body>
                         <Modal.Footer>
@@ -203,7 +253,8 @@ const Users = () => {
                         <Modal.Body>
                             {userToDelete && (
                                 <p>
-                                    Are you sure you want to delete the user <strong>{`${userToDelete.first_name} ${userToDelete.last_name}`}</strong>?
+                                    Are you sure you want to delete the user{' '}
+                                    <strong>{`${userToDelete.first_name} ${userToDelete.last_name}`}</strong>?
                                 </p>
                             )}
                         </Modal.Body>

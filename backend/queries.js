@@ -115,8 +115,24 @@ function signin(request, response) {
 }
 
 function getUsers(request, response) {
-   let sql = 'select id, first_name, last_name, company, email, ' +
-      'phone_number from users where approved=true';
+   let sql = 'SELECT\n' +
+       '  users.id AS id,\n' +
+       '  first_name,\n' +
+       '  last_name,\n' +
+       '  company,\n' +
+       '  email,\n' +
+       '  phone_number,\n' +
+       '  ARRAY_AGG(roles.role) AS roles\n' +
+       'FROM\n' +
+       '  users\n' +
+       'JOIN\n' +
+       '  user_role ON users.id = user_role.user_id\n' +
+       'JOIN\n' +
+       '  roles ON user_role.role_id = roles.id\n' +
+       'WHERE\n' +
+       '  approved = true\n' +
+       'GROUP BY\n' +
+       '  users.id, first_name, last_name, company, email, phone_number;';
    connection.query(sql, function(err, results) {
       response.status(200).json(results.rows);
    });
