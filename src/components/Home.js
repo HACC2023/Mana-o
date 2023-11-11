@@ -11,7 +11,8 @@ const Home = () => {
         <div style={{ display: 'flex', width: '100%' }}>
             <Sidebar />
             <div className="main-content" style={{ flex: 1 }}>
-                <Navbar />
+                {currentUser.roles.includes('admin') &&
+                    (<Navbar />)}
                 <div className="bar">
                     <strong>{currentUser.first_name} {currentUser.last_name}'s</strong> Homepage
                 </div>
