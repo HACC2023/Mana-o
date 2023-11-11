@@ -10,6 +10,7 @@ import Dobor from './components/Dobor';
 import Home from './components/Home';
 import ApproveUsers from './components/ApproveUsers';
 import Users from './components/Users';
+import Profile from './components/Profile';
 import ForgotPassword from './components/ForgotPassword';
 import AuthService from './services/auth.service';
 import Sidebar from './components/Sidebar.js';
@@ -54,6 +55,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Landing />} />
                         <Route path="/home" element={<UserElement current_user_type={current_user_type}><Home /></UserElement>} />
+                        <Route path="/profile" element={<UserElement current_user_type={current_user_type}><Profile /></UserElement>} />
                         <Route path="/unapprovedusers" element={<AdminElement current_user_type={current_user_type}><ApproveUsers /></AdminElement>} />
                         <Route path="/users" element={<AdminElement current_user_type={current_user_type}><Users /></AdminElement>} />
                         <Route path="/about" element={<About />} />

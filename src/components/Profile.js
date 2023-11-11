@@ -19,7 +19,7 @@ import {
     MDBListGroupItem
 } from 'mdb-react-ui-kit';
 
-export default function Home() {
+export default function Profile() {
     const currentUser = AuthService.getCurrentUser();
     return (
         <section style={{ backgroundColor: '#eee' }}>
