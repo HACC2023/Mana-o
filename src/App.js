@@ -9,6 +9,7 @@ import TestMap from './components/TestMap';
 import Dobor from './components/Dobor';
 import Home from './components/Home';
 import ApproveUsers from './components/ApproveUsers';
+import Users from './components/Users';
 import ForgotPassword from './components/ForgotPassword';
 import AuthService from './services/auth.service';
 import Sidebar from './components/Sidebar.js';
@@ -24,23 +25,25 @@ function App() {
     const current_user_type = currentUser ? currentUser.roles : [];
 
     return (
-        <div className="App">
-            <header className="App-header"></header>
-            <div className="routes">
-                <Routes>
-                    <Route path="/" element={<Landing />} />
-                    <Route path="/home" element={<UserElement current_user_type={current_user_type}><Home /></UserElement>} />
-                    <Route path="/unapprovedusers" element={<AdminElement current_user_type={current_user_type}><ApproveUsers /></AdminElement>} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/testmap" element={<TestMap />} />
-                    <Route path="/dobor" element={<Dobor />} />
-                    <Route path="/forgotpassword" element={<ForgotPassword />} />
-                    <Route path="/sidebar" element={<Sidebar />} />
-                   {/*// <Route path="/navbar" element={<Navbar />} />*/}
-                    <Route path="*" element={<div>404 Page Not Found</div>} />
-                </Routes>
+        <div className="App" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+            <Navbar />
+            <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
+                <Sidebar current_user_type={current_user_type} />
+                <div className="main-content" style={{ flex: 1 }}>
+                    <Routes>
+                        <Route path="/" element={<Landing />} />
+                        <Route path="/home" element={<UserElement current_user_type={current_user_type}><Home /></UserElement>} />
+                        <Route path="/unapprovedusers" element={<AdminElement current_user_type={current_user_type}><ApproveUsers /></AdminElement>} />
+                        <Route path="/users" element={<AdminElement current_user_type={current_user_type}><Users /></AdminElement>} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/testmap" element={<TestMap />} />
+                        <Route path="/dobor" element={<Dobor />} />
+                        <Route path="/forgotpassword" element={<ForgotPassword />} />
+                        <Route path="*" element={<Navigate to="/" />} />
+                    </Routes>
+                </div>
             </div>
         </div>
     );
@@ -50,7 +53,8 @@ function UserElement({ children, current_user_type }) {
     if (current_user_type.includes(USER_TYPE.USER)) {
         return <>{children}</>;
     } else {
-        return <Navigate to="/login" />;
+        // Redirect to login or handle unauthorized access
+        return <Navigate to="/" />;
     }
 }
 
@@ -58,7 +62,8 @@ function AdminElement({ children, current_user_type }) {
     if (current_user_type.includes(USER_TYPE.ADMIN)) {
         return <>{children}</>;
     } else {
-        return <Navigate to="/login" />;
+        // Redirect to login or handle unauthorized access
+        return <Navigate to="/" />;
     }
 }
 
