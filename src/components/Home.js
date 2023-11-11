@@ -5,16 +5,18 @@ import { Link } from 'react-router-dom';
 const Home = () => {
     const currentUser = AuthService.getCurrentUser();
 
-    return(
-        <div className = "home-contents">
-            <div className = "bar">
+    return (
+        <div className="home-contents">
+            <div className="bar">
                 <strong>{currentUser.first_name} {currentUser.last_name}'s</strong> Homepage
             </div>
-            <div>
-                <Link to="/unapprovedusers">Approve Users</Link>
-            </div>
+            {currentUser.roles.includes('admin') && (
+                <div>
+                    <Link to="/unapprovedusers">Approve Users</Link>
+                </div>
+            )}
         </div>
-
     );
 }
+
 export default Home;

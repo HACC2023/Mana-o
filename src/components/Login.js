@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // Import Link component
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import { Nav, NavItem } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapLocationDot, faDroplet, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
-import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faLock, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 import "./Login.css";
 
@@ -37,6 +37,11 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     const onChangeEmail = (e) => {
         const email = e.target.value;
@@ -55,7 +60,7 @@ const Login = () => {
         setLoading(true);
 
         if (!email || !password) {
-            setMessage("Plese fill out required field!");
+            setMessage("Please fill out required fields!");
             setLoading(false);
         } else {
             AuthService.login(email, password).then(
@@ -108,9 +113,9 @@ const Login = () => {
                                             style={{ textAlign: "center" }}
                                         />
                                     </div>
-                                    <div className="form-group">
+                                    <div className="form-group password-input-group">
                                         <input
-                                            type="password"
+                                            type={showPassword ? "text" : "password"}
                                             className="form-control mb-4"
                                             name="password"
                                             value={password}
@@ -118,6 +123,12 @@ const Login = () => {
                                             placeholder="Your password"
                                             style={{ textAlign: "center" }}
                                         />
+                                        <div className="password-toggle">
+                                            <FontAwesomeIcon
+                                                icon={showPassword ? faEyeSlash : faEye}
+                                                onClick={togglePasswordVisibility}
+                                            />
+                                        </div>
                                     </div>
                                     <button className="btn btn-primary btn block mb-2" disabled={loading}>
                                         {loading && (
@@ -143,7 +154,6 @@ const Login = () => {
                             </Col>
                         </Row>
                     </div>
-                    {/* Bottom Navigation Bar */}
                     <nav className="navbar fixed-bottom navbar-light bottom-tab-nav" role="navigation">
                         <Nav className="w-100">
                             <div className="d-flex flex-row justify-content-around w-100">
