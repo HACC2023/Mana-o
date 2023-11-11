@@ -49,8 +49,8 @@ const transporter = nodemailer.createTransport({
     port: 465,
     secure: true,
     auth: {
-        user: "feimeichen666@gmail.com",
-        pass: "tkqi mnzi rptl lbws ",
+        user: "manao.malamahonua@gmail.com",
+        pass: "ygoy vdwy ibmf gatr",
     },
 });
 
@@ -66,7 +66,7 @@ app.post("/reset", (req, res) => {
             verificationCodes[email] = verificationCode;
 
             const mailOptions = {
-                from: "feimeichen666@gmail.com",
+                from: "manao.malamahonua@gmail.com",
                 to: email,
                 subject: "Reset Password",
                 text: 'Your verification code is: ' + verificationCode,
