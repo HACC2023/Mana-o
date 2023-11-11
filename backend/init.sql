@@ -13,7 +13,7 @@ drop table if exists user_role cascade;
 create table detections(
    id serial,
    removal_id int unique,
-   dobor_designation text unique,
+   dobor_designation text,
    debris_type_detected text,
    debris_container text,
    boat_claim text,
@@ -86,7 +86,7 @@ create table reporters (
    address text,
    city text,
    state text,
-   zipcode numeric(5),
+   zipcode text,
    phone_number text,
    primary key (id)
 );

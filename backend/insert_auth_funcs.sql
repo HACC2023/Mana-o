@@ -1,3 +1,7 @@
+drop function if exists checkForEmail;
+drop function if exists addUser;
+drop function if exists check_id;
+drop function if exists update_password;
 create or replace function checkForEmail(_email text)
    returns integer as
    $$

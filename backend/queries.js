@@ -4,8 +4,8 @@ const config = require("../config/auth.config.js");
 
 const connection = new pg.Pool({
    host: '127.0.0.1',
-   user: 'feimei',
-   password: 'feimei',
+   user: 'taryn',
+   password: 'tarynpass',
    database: 'honua'
 });
 
@@ -26,6 +26,48 @@ function createUser(request, response) {
       else {
          response.status(400).json({ message: 'email exists' });
       }
+   });
+}
+
+function addDetection(request, response) {
+   const debris_type = request.body.debris_type_detected;
+   const debris_container = request.body.debris_container;
+   const boat_claim = request.body.boat_claim;
+   const bio_level = request.body.bio_level;
+   const gen_debris_loc = request.body.gen_debris_location;
+   let lat_long = request.body.lat_long;
+   const island = request.body.island;
+   const near_landmark = request.body.near_landmark;
+   const debris_desc = request.body.debris_desc;
+   const image_filenames = request.body.image_filenames;
+   const last_name = request.body.last_name;
+   const first_name = request.body.first_name;
+   const email = request.body.email;
+   const address = request.body.address;
+   const city = request.body.city;
+   const state = request.body.state;
+   const zip = request.body.zip;
+   const phone = request.body.phone;
+   let tokens = lat_long.split(" ");
+   if (tokens.length !== 2){
+      lat_long = '0 0';
+   }
+   else if (isNaN(tokens[0]) || isNaN(tokens[1])) {
+      lat_long = '0 0';
+   }
+   let sql = "select add_detection('" + debris_type + "','" +
+      debris_container + "','" + boat_claim + "'," + bio_level +
+      ",'" + gen_debris_loc + "','" + lat_long + "','" + island + 
+      "','" + near_landmark + "','" + debris_desc + "','" + 
+      image_filenames + "','" + last_name + "','" + first_name + 
+      "','" + email + "','" + address + "','" + city + "','" + 
+      state + "','" + zip + "','" + phone + "')"
+   console.log(sql);
+   connection.query(sql, function(err, results) {
+      if(err) {
+         console.log(err);
+      }
+      console.log("results: " + results);
    });
 }
 
@@ -152,4 +194,4 @@ function updatePassword(email, newPassword, callback) {
 
 
 module.exports = { createUser, signin, getUsers, getUnapprovedUsers,
-   getDetections, getReporters, getRemovals, approveUsers, checkExist, updatePassword };
+   getDetections, getReporters, getRemovals, approveUsers, checkExist, updatePassword, addDetection };
