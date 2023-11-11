@@ -3,6 +3,7 @@ import Form from "react-validation/build/form";
 import {Container, Row, Col} from "react-bootstrap";
 import './Dobor.css';
 import { icon } from "leaflet";
+import axios from "axios";
 
 const Dobor = () =>{
     
@@ -328,31 +329,71 @@ const Dobor = () =>{
         else {
             output += "," + question1.otherDebris;
         }
+        const debris_type_detected = output;
         //output += "," + question1.otherDebris
         output += ";" + question2.selectedOption
+        const debris_container = question2.selectedOption;
         output += ";" + question3.selectedOption
+        const boat_claim = question3.selectedOption;
         output += ";" + question4.foulingLevel;
+        const bio_level = question4.foulingLevel;
         output += ";" + locationOutput + question5.locationOffshore;
+        const gen_debris_location = locationOutput + question5.locationOffshore;
         output += ";" + question6;
-        output += ";" + question7.selectedIsland ;
+        const lat_long = question6;
+        output += ";" + question7.selectedIsland;
+        const island = question7.selectedIsland;
         output += ";" + question8;
+        const near_landmark = question8;
+        let tempout = '';
         if (question9.selectedOption === 'Other - please explain how urgent recovery/removal is') {
-            output += ","+ question9.customDescription;
+            output += ";" + 'Other - removal urgency: ' + question9.customDescription;
+            tempout += ";" + 'Other - removal urgency: '+ question9.customDescription;
         }
         else {
             output += ";" + question9.selectedOption;
+            tempout += question9.selectedOption
         }
+        const debris_desc = tempout;
         output += ";" + imageFileNames;
+        const image_filenames = imageFileNames;
         output += ";" + question11;
+        const last_name = question11;
         output += ";" + question12;
+        const first_name = question12;
         output += ";" + question13;
+        const email = question13;
         output += ";" + question15;
+        const address = question15;
         output += ";" + question16;
+        const city = question16;
         output += ";" + question17;
+        const state = question17;
         output += ";" + question18;
+        const zip = question18;
         output += ";" + question19;
+        const phone = question19;
         console.log(output);
-
+        axios.post('http://localhost:8080/detections', {
+           debris_type_detected,
+           debris_container,
+           boat_claim,
+           bio_level,
+           gen_debris_location,
+           lat_long,
+           island,
+           near_landmark,
+           debris_desc,
+           image_filenames,
+           last_name,
+           first_name,
+           email,
+           address,
+           city,
+           state,
+           zip,
+           phone,
+        });
         /*console.log('Question 1 - Other Debris:', question1.otherDebris);
         console.log('Question 2 - Container:', question2.selectedOption);
         console.log('Question 3 - Boat:', question3.selectedOption);

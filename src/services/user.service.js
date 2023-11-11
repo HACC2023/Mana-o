@@ -18,7 +18,7 @@ const getAdminPageData = () => {
 const getUnapprovedUsers = () => {
   return axios.get(API_URL + "unapprovedusers", {headers: authHeader()});
 }
-const updatedApprovedStatus = (approvedUserIds) => {
+const updateApprovedStatus = (approvedUserIds) => {
   return axios.put(API_URL + "approveusers", {approvedUserIds});
 }
 
@@ -27,7 +27,7 @@ const UserService = {
   getUsersPageData,
   getAdminPageData,
   getUnapprovedUsers,
-  updatedApprovedStatus
+  updateApprovedStatus
 };
 
 export default UserService;
