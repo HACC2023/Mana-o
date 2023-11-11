@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import AuthService from '../services/auth.service';
 import {
     MDBContainer,
     MDBNavbar,
@@ -19,9 +20,11 @@ import {
 
 const Navbar = () => {
     const [openBasic, setOpenBasic] = useState(false);
+    const currentUser = AuthService.getCurrentUser();
+    const current_user_type = currentUser ? currentUser.roles : [];
 
     return (
-        <MDBNavbar expand='lg' light bgColor='light'>
+        <MDBNavbar expand='lg' light bgColor='light' >
             <MDBContainer fluid>
                 <MDBNavbarBrand href='#'>Brand</MDBNavbarBrand>
 

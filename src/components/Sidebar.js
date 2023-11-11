@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {
     CDBSidebar,
     CDBSidebarContent,
@@ -8,34 +9,48 @@ import {
     CDBSidebarFooter,
 } from 'cdbreact';
 
-const Sidebar = () => {
+const Sidebar = ({ current_user_type }) => {
+    const navigate = useNavigate();
+    const [openBasic, setOpenBasic] = useState(false);
+
     return (
-        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div style={{height: '100vh', display: 'flex', flexDirection: 'column'}}>
             <CDBSidebar textColor="#333" backgroundColor="#f0f0f0">
-                <CDBSidebarHeader prefix={<i className="fa fa-bars" />}>
+                <CDBSidebarHeader prefix={<i className="fa fa-bars"/>}>
                     Contrast Light Mode
                 </CDBSidebarHeader>
                 <CDBSidebarContent>
                     <CDBSidebarMenu>
-                        <CDBSidebarMenuItem icon="th-large">Dashboard</CDBSidebarMenuItem>
+                        <CDBSidebarMenuItem icon="home" onClick={() => navigate('/home')}>home</CDBSidebarMenuItem>
+                        {current_user_type.length > 0 && current_user_type.includes('admin') ? (
+                            <div>
+                            <CDBSidebarMenuItem icon="users" onClick={() => navigate('/users')}>Users</CDBSidebarMenuItem>
+                            <CDBSidebarMenuItem icon="th-large" onClick={() => navigate('/unapprovedusers')}>
+                                Unapproved Users
+                            </CDBSidebarMenuItem>
+                            </div>
+                        ) : <></>}
+
+                        <CDBSidebarMenuItem icon="file" onClick={() => navigate('/dobor')}>Dobor Form</CDBSidebarMenuItem>
+                        <CDBSidebarMenuItem icon="user">profile</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="sticky-note">Components</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="chart-line" iconType="solid">
                             Metrics
                         </CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="user">User</CDBSidebarMenuItem>
+
                         <CDBSidebarMenuItem icon="envelope">Mail</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="calendar">Calendar</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="cog">Settings</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="bell">Notifications</CDBSidebarMenuItem>
-                        <CDBSidebarMenuItem icon="file">File</CDBSidebarMenuItem>
                     </CDBSidebarMenu>
                 </CDBSidebarContent>
-                <CDBSidebarFooter style={{ textAlign: 'center' }}>
+                <CDBSidebarFooter style={{textAlign: 'center'}}>
                     <div
                         className="sidebar-btn-wrapper"
-                        style={{ padding: '20px 5px' }}
+                        style={{padding: '20px 5px'}}
                     >
-                        Sidebar Footer
+                        Logout
                     </div>
                 </CDBSidebarFooter>
             </CDBSidebar>
