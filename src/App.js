@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Landing from './components/Landing';
@@ -23,20 +23,34 @@ const USER_TYPE = {
 function App() {
     const currentUser = AuthService.getCurrentUser();
     const current_user_type = currentUser ? currentUser.roles : [];
-
     const location = useLocation();
+    const [contentHeight, setContentHeight] = useState(0);
 
     const shouldRenderNavbarAndSidebar = () => {
         const excludedRoutes = ['/', '/about', '/login', '/register', '/testmap', '/forgotpassword'];
         return !excludedRoutes.includes(location.pathname);
     };
 
+    useEffect(() => {
+        const calculateContentHeight = () => {
+            const navbarHeight = document.getElementById('navbar')?.offsetHeight || 0;
+            setContentHeight(window.innerHeight - navbarHeight);
+        };
+
+        calculateContentHeight();
+        window.addEventListener('resize', calculateContentHeight);
+
+        return () => {
+            window.removeEventListener('resize', calculateContentHeight);
+        };
+    }, []);
+
     return (
         <div className="App" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-            {shouldRenderNavbarAndSidebar() && <Navbar />}
+            {shouldRenderNavbarAndSidebar() && <Navbar id="navbar" />}
             <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
                 {shouldRenderNavbarAndSidebar() && <Sidebar current_user_type={current_user_type} />}
-                <div className="main-content" style={{ flex: 1 }}>
+                <div className="main-content" style={{ flex: 1, overflowY: 'auto', height: contentHeight }}>
                     <Routes>
                         <Route path="/" element={<Landing />} />
                         <Route path="/home" element={<UserElement current_user_type={current_user_type}><Home /></UserElement>} />

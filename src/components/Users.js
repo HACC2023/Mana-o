@@ -106,7 +106,7 @@ const Users = () => {
                     <Row>
                         {users.map((user) => (
                             <Col key={user.id} md={4} className="mb-3">
-                                <Card style={{ width: '25rem' }}>
+                                <Card style={{ width: '24rem' }}>
                                     <Card.Header className="header-bg">
                                         <h5>{`${user.first_name} ${user.last_name}`}</h5>
                                     </Card.Header>
