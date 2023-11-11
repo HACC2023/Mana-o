@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Landing from './components/Landing';
 import About from './components/About';
 import Login from './components/Login';
@@ -24,11 +24,18 @@ function App() {
     const currentUser = AuthService.getCurrentUser();
     const current_user_type = currentUser ? currentUser.roles : [];
 
+    const location = useLocation();
+
+    const shouldRenderNavbarAndSidebar = () => {
+        const excludedRoutes = ['/', '/about', '/login', '/register', '/testmap', '/forgotpassword'];
+        return !excludedRoutes.includes(location.pathname);
+    };
+
     return (
         <div className="App" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-            <Navbar />
+            {shouldRenderNavbarAndSidebar() && <Navbar />}
             <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-                <Sidebar current_user_type={current_user_type} />
+                {shouldRenderNavbarAndSidebar() && <Sidebar current_user_type={current_user_type} />}
                 <div className="main-content" style={{ flex: 1 }}>
                     <Routes>
                         <Route path="/" element={<Landing />} />
@@ -53,7 +60,7 @@ function UserElement({ children, current_user_type }) {
     if (current_user_type.includes(USER_TYPE.USER)) {
         return <>{children}</>;
     } else {
-        // Redirect to login or handle unauthorized access
+        // Redirect to login
         return <Navigate to="/" />;
     }
 }
@@ -62,7 +69,7 @@ function AdminElement({ children, current_user_type }) {
     if (current_user_type.includes(USER_TYPE.ADMIN)) {
         return <>{children}</>;
     } else {
-        // Redirect to login or handle unauthorized access
+        // Redirect to login
         return <Navigate to="/" />;
     }
 }
