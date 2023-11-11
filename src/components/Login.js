@@ -123,11 +123,11 @@ const Login = () => {
                                             placeholder="Your password"
                                             style={{ textAlign: "center" }}
                                         />
-                                        <div className="password-toggle">
+                                        <div className="password-toggle mb-2">
                                             <FontAwesomeIcon
                                                 icon={showPassword ? faEyeSlash : faEye}
                                                 onClick={togglePasswordVisibility}
-                                            />
+                                            /> show password
                                         </div>
                                     </div>
                                     <button className="btn btn-primary btn block mb-2" disabled={loading}>

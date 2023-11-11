@@ -11,6 +11,8 @@ import Home from './components/Home';
 import ApproveUsers from './components/ApproveUsers';
 import ForgotPassword from './components/ForgotPassword';
 import AuthService from './services/auth.service';
+import Sidebar from './components/Sidebar.js';
+import Navbar from './components/Navbar.js';
 
 const USER_TYPE = {
     ADMIN: 'admin',
@@ -35,6 +37,8 @@ function App() {
                     <Route path="/testmap" element={<TestMap />} />
                     <Route path="/dobor" element={<Dobor />} />
                     <Route path="/forgotpassword" element={<ForgotPassword />} />
+                    <Route path="/sidebar" element={<Sidebar />} />
+                   {/*// <Route path="/navbar" element={<Navbar />} />*/}
                     <Route path="*" element={<div>404 Page Not Found</div>} />
                 </Routes>
             </div>
