@@ -1,3 +1,6 @@
+drop function if exists add_detection;
+drop function if exists make_dobor_designation;
+
 create or replace function split_string(_text text)
    returns bool as
    $$
@@ -57,9 +60,12 @@ create or replace function make_dobor_designation(_island text)
    $$
    language 'plpgsql';
    
-create or replace function add_detection(_email text, _debris_type text, 
+create or replace function add_detection(_debris_type text, 
    _debris_container text, _boat_claim text, _biofouling_level numeric(2), 
-   _gen_debris_loc text, _island text, _near_landmark text)
+   _gen_debris_loc text, _lat_long text, _island text, _near_landmark text,
+   _debris_desc text, _image_filenames text, _ln text, _fn text, 
+   _email text, _address text, _city text, _state text, _zip text, 
+   _phone text)
    returns bool as
    $$
       declare
@@ -68,27 +74,38 @@ create or replace function add_detection(_email text, _debris_type text,
          _reporter_id integer;
          _dob_desig text;
          _detection_id integer;
+         _detection_latitude numeric(15,7);
+         _detection_longitude numeric(15,7);
+         _lat_longs text[];
          _debris_types text[];
          _deb_type text;
          _new_reporter bool;
       begin
          select into rec1 * from reporters where email=_email;
          if not found then
-            insert into reporters (email) values (_email);
+            insert into reporters (last_name, first_name, email, address, 
+               city, state, zipcode, phone_number) values 
+               (_ln, _fn, _email, _address, _city, _state, _zip, _phone);
             _reporter_id := currval('reporters_id_seq');
             _new_reporter = true;
          else
             _reporter_id := rec1.id;
             _new_reporter = false;
          end if;
+         perform(replace(_boat_claim,'''',''''''));
+         _lat_longs := string_to_array(_lat_long, ' ');
+         _detection_latitude := _lat_longs[1]::decimal;
+         _detection_longitude := _lat_longs[2]::decimal;
          _debris_types := string_to_array(_debris_type, ',');
+         _dob_desig := make_dobor_designation(_island);
          foreach _deb_type in array _debris_types loop
-            _dob_desig := make_dobor_designation(_island);
             insert into detections (dobor_designation, debris_type_detected, 
                debris_container, boat_claim, biofouling_level,
-               general_debris_location,island, nearest_landmark) values 
+               general_debris_location,latitude, longitude, island, 
+               nearest_landmark,debris_relative_location) values 
                (_dob_desig, _deb_type,_debris_container, _boat_claim, 
-                _biofouling_level, _gen_debris_loc, _island, _near_landmark);
+                _biofouling_level, _gen_debris_loc, _detection_latitude,
+                _detection_longitude, _island, _near_landmark, _debris_desc);
             _detection_id := currval('detections_id_seq');
             insert into detection_reporter (detection_id, reporter_id) values 
                (_detection_id, _reporter_id);
@@ -111,3 +128,4 @@ create or replace function add_detection(_email text, _debris_type text,
       $$
       language 'plpgsql';
    
+
