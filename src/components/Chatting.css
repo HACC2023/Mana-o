@@ -5,15 +5,21 @@
     height: 100vh;
 }
 
-.friends-list,
+.friends-list {
+    flex: 1; /* Takes up one-third of the available width */
+    overflow-y: auto;
+    padding: 10px;
+    border-right: 3px solid gray;
+}
+
 .chat-messages {
-    flex: 1;
+    flex: 2; /* Takes up two-thirds of the available width */
     overflow-y: auto;
     padding: 10px;
 }
 
 .friends-list {
-    border-right: 1px solid gray;
+    border-right: 3px solid gray;
 }
 
 .message-container {
@@ -49,6 +55,7 @@
 .message-input input {
     flex: 1;
     padding: 5px;
+    border-radius: 10px;
     margin-right: 5px;
 }
 
@@ -59,4 +66,39 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+.message-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.username {
+    margin-right: 10px;
+}
+.input-container {
+& input{
+      border: 2px solid lightgrey;
+      border-radius:  10px;
+      padding: 10px 10px;
+      display: block;
+      margin: 0 auto;
+      width: 80%;
+      height: 40px;
+  }
+& button{
+      display: block;
+      margin: 0 auto;
+      width: 20%;
+      height: 40px;
+      background-color: #527CEC;
+      color: #FFFFFF;
+&:hover {
+     background-color: #3e3ee5;
+ }
+}
+}
+
+h1, h2, h3 {
+    color: #7adede;
+    font-family: 'Arial', sans-serif;
 }

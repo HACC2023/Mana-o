@@ -3,6 +3,24 @@ import io from 'socket.io-client';
 
 import './Chatting.css';
 import AuthService from '../services/auth.service';
+import {
+    MDBCol,
+    MDBContainer,
+    MDBRow,
+    MDBCard,
+    MDBCardText,
+    MDBCardBody,
+    MDBCardImage,
+    MDBBtn,
+    MDBBreadcrumb,
+    MDBBreadcrumbItem,
+    MDBProgress,
+    MDBProgressBar,
+    MDBIcon,
+    MDBListGroup,
+    MDBListGroupItem
+} from 'mdb-react-ui-kit';
+
 
 const ENDPOINT = 'http://localhost:8080';
 
@@ -58,7 +76,7 @@ const Chatting = () => {
                 author: user,
                 username: userName,
                 messages: inputMessage,
-                time: new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes(),
+                time: new Date(Date.now()).getHours() + ':' + String(new Date(Date.now()).getMinutes()).padStart(2, '0'),
             };
 
             // Send the message to the server along with the room name
@@ -74,16 +92,51 @@ const Chatting = () => {
         <div className="chat-container">
             {/* Friends List on the left side */}
             <div className="friends-list">
-                <h3>Join A chat</h3>
-                <input
-                    type="text"
-                    placeholder="Enter room name"
-                    value={room}
-                    onChange={(event) => {
-                        setRoom(event.target.value);
-                    }}
-                />
-                <button onClick={joinRoom}>Join Room</button>
+                <MDBRow>
+                    <MDBCol>
+                        <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
+                            <MDBBreadcrumbItem>
+                              <h1>Join a room</h1>
+                            </MDBBreadcrumbItem>
+                        </MDBBreadcrumb>
+                    </MDBCol>
+                </MDBRow>
+                <div className="input-container d-flex align-items-center"> {/* Added "d-flex" and "align-items-center" classes */}
+                    <input
+                        type="text"
+                        placeholder="Enter room name"
+                        value={room}
+                        onChange={(event) => {
+                            setRoom(event.target.value);
+                        }}
+                    />
+                    <button className="btn btn-primary join-button" onClick={joinRoom}>
+                        Join
+                    </button>
+                </div>
+                <hr  />
+                <MDBRow>
+                    <MDBCol>
+                        <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4">
+                            <MDBBreadcrumbItem>
+                                <h1>Chat with Friend</h1>
+                            </MDBBreadcrumbItem>
+                        </MDBBreadcrumb>
+                    </MDBCol>
+                </MDBRow>
+                <div className="input-container d-flex align-items-center"> {/* Added "d-flex" and "align-items-center" classes */}
+                    <input
+                        type="text"
+                        placeholder="Enter friend's Email"
+                        value={room}
+                        onChange={(event) => {
+                            setRoom(event.target.value);
+                        }}
+                    />
+                    <button className="btn btn-primary join-button" onClick={joinRoom}>
+                        Join
+                    </button>
+                </div>
             </div>
 
             {/* Chat Messages */}
@@ -117,7 +170,7 @@ const Chatting = () => {
                     </div>
                 </div>
             ) : (
-                <p>Enter a room to chat with other users, and do not let users know your chat room key.</p>
+                 <></>
             )}
         </div>
     );
