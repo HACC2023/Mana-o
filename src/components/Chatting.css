@@ -3,6 +3,12 @@
 .chat-container {
     display: flex;
     height: 100vh;
+
+h1, h2, h3 {
+    color: #96dc8b;
+    font-family: 'Arial', sans-serif;
+}
+
 }
 
 .friends-list {
@@ -96,9 +102,4 @@
      background-color: #3e3ee5;
  }
 }
-}
-
-h1, h2, h3 {
-    color: #7adede;
-    font-family: 'Arial', sans-serif;
 }
