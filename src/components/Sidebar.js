@@ -33,6 +33,7 @@ const Sidebar = ({ current_user_type }) => {
 
                         <CDBSidebarMenuItem icon="file" onClick={() => navigate('/dobor')}>Dobor Form</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="user" onClick={() => navigate('/profile')}>profile</CDBSidebarMenuItem>
+                        <CDBSidebarMenuItem icon="far fa-comment-dots" onClick={() => navigate('/message')}>Message</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="sticky-note">Components</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="chart-line" iconType="solid">
                             Metrics

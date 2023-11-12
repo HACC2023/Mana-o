@@ -8,6 +8,7 @@ import Register from './components/Register';
 import TestMap from './components/TestMap';
 import Dobor from './components/Dobor';
 import Home from './components/Home';
+import Chatting from './components/Chatting';
 import ApproveUsers from './components/ApproveUsers';
 import Users from './components/Users';
 import Profile from './components/Profile';
@@ -15,7 +16,7 @@ import ForgotPassword from './components/ForgotPassword';
 import AuthService from './services/auth.service';
 import Sidebar from './components/Sidebar.js';
 import Navbar from './components/Navbar.js';
-
+import ChatView from './components/ChatView.js';
 const USER_TYPE = {
     ADMIN: 'admin',
     USER: 'user',
@@ -54,8 +55,10 @@ function App() {
                 <div className="main-content" style={{ flex: 1, overflowY: 'auto', height: contentHeight }}>
                     <Routes>
                         <Route path="/" element={<Landing />} />
+                        <Route path="/chatview" element={<ChatView />} />
                         <Route path="/home" element={<UserElement current_user_type={current_user_type}><Home /></UserElement>} />
                         <Route path="/profile" element={<UserElement current_user_type={current_user_type}><Profile /></UserElement>} />
+                        <Route path="/message" element={<UserElement current_user_type={current_user_type}><Chatting /></UserElement>} />
                         <Route path="/unapprovedusers" element={<AdminElement current_user_type={current_user_type}><ApproveUsers /></AdminElement>} />
                         <Route path="/users" element={<AdminElement current_user_type={current_user_type}><Users /></AdminElement>} />
                         <Route path="/about" element={<About />} />

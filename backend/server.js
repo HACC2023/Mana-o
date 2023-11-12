@@ -34,10 +34,38 @@ app.post("/users/signup", db.createUser);
 app.post("/users/signin", db.signin);
 app.post("/detections", db.addDetection);
 
-app.listen(8080, () => {
+const server = app.listen(8080, () => {
     console.log("Server running on port 8080");
 });
 
+const io = require('socket.io')(server, {
+    pingTimeout: 60000,
+    cors:{
+        origin: "http://localhost:8081",
+    },
+})
+
+io.on("connection", (socket) => {
+    console.log(`A user connected": ${socket.id}`);
+
+    socket.on("join room", (room) => {
+        // Join the specified room
+        socket.join(room);
+        console.log(`User with ID: ${socket.id} joined room: ${room}`);
+    });
+
+    socket.on("chat message", (data) => {
+        console.log(data);
+        console.log("Received message from client:", data.message);
+        // Broadcast the message to all connected clients, including the sender
+        socket.to(data.room).emit("receive message", data);
+        //socket.emit("reveive message", message);
+    });
+
+    socket.on("disconnect", () => {
+        console.log("User disconnected");
+    });
+});
 const generateVerificationCode = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
 };
