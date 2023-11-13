@@ -51,7 +51,7 @@ const Users = () => {
                 email: userToEdit.email,
                 phoneNumber: userToEdit.phone_number,
                 company: userToEdit.company,
-                role: userToEdit.role,
+                role:  userToEdit.roles.includes('admin') ? 'admin' : 'user',
             });
         }
     };
