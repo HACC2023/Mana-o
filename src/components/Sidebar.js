@@ -17,7 +17,7 @@ const Sidebar = ({ current_user_type }) => {
         <div style={{height: '100vh', display: 'flex', flexDirection: 'column'}}>
             <CDBSidebar textColor="#333" backgroundColor="#f0f0f0">
                 <CDBSidebarHeader prefix={<i className="fa fa-bars"/>}>
-                    Contrast Light Mode
+                    Resources
                 </CDBSidebarHeader>
                 <CDBSidebarContent>
                     <CDBSidebarMenu>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AuthService from '../services/auth.service';
+
 import {
     MDBContainer,
     MDBNavbar,
@@ -21,12 +23,19 @@ import {
 const Navbar = () => {
     const [openBasic, setOpenBasic] = useState(false);
     const currentUser = AuthService.getCurrentUser();
+    const navigate = useNavigate();
     const current_user_type = currentUser ? currentUser.roles : [];
 
     return (
         <MDBNavbar expand='lg' light bgColor='light' >
             <MDBContainer fluid>
-                <MDBNavbarBrand href='#'>Brand</MDBNavbarBrand>
+                <MDBNavbarBrand href='#'>
+                <img
+                    src="/images/MalamaHonua.png"
+                    alt="malama-honua-nav"
+                    width="70px"
+                />
+                </MDBNavbarBrand>
 
                 <MDBNavbarToggler
                     aria-controls='navbarSupportedContent'
@@ -40,30 +49,8 @@ const Navbar = () => {
                 <MDBCollapse navbar open={openBasic}>
                     <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
                         <MDBNavbarItem>
-                            <MDBNavbarLink active aria-current='page' href='#'>
+                            <MDBNavbarLink onClick={() => navigate('/home')} active aria-current='page'>
                                 Home
-                            </MDBNavbarLink>
-                        </MDBNavbarItem>
-                        <MDBNavbarItem>
-                            <MDBNavbarLink href='#'>Link</MDBNavbarLink>
-                        </MDBNavbarItem>
-
-                        <MDBNavbarItem>
-                            <MDBDropdown>
-                                <MDBDropdownToggle tag='a' className='nav-link' role='button'>
-                                    Dropdown
-                                </MDBDropdownToggle>
-                                <MDBDropdownMenu>
-                                    <MDBDropdownItem link>Action</MDBDropdownItem>
-                                    <MDBDropdownItem link>Another action</MDBDropdownItem>
-                                    <MDBDropdownItem link>Something else here</MDBDropdownItem>
-                                </MDBDropdownMenu>
-                            </MDBDropdown>
-                        </MDBNavbarItem>
-
-                        <MDBNavbarItem>
-                            <MDBNavbarLink disabled href='#' tabIndex={-1} aria-disabled='true'>
-                                Disabled
                             </MDBNavbarLink>
                         </MDBNavbarItem>
                     </MDBNavbarNav>
