@@ -15,6 +15,13 @@ const getAdminPageData = () => {
   return axios.get(API_URL + "admin", { headers: authHeader() });
 };
 
+const getDetections = () => {
+  return axios.get(API_URL + "detections", {headers: authHeader() });
+}
+
+function getDetectionById(id){
+  return axios.get(API_URL + `detections/${id}`, {headers: authHeader()});
+}
 const getUnapprovedUsers = () => {
   return axios.get(API_URL + "unapprovedusers", {headers: authHeader()});
 }
@@ -26,6 +33,8 @@ const UserService = {
   getPublicContent,
   getUsersPageData,
   getAdminPageData,
+  getDetections,
+  getDetectionById,
   getUnapprovedUsers,
   updatedApprovedStatus
 };

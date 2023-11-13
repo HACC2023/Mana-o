@@ -1,0 +1,15 @@
+update detections set date_detected='2023-09-12 9:30' where id=1;
+update detections set date_detected='2023-09-12 9:30' where id=2;
+update detections set date_detected='2023-09-22 13:25' where id=3;
+update detections set date_detected='2023-09-22 13:25' where id=4;
+update detections set date_detected='2023-10-24 8:45' where id=5;
+update detections set date_detected='2023-10-24 8:45' where id=6;
+update detections set date_detected='2023-10-30 11:35' where id=7;
+update detections set date_detected='2023-10-30 11:35' where id=8;
+update detections set date_detected='2023-10-30 14:35' where id=9;
+update detections set date_detected='2023-10-30 14:35' where id=10;
+update detections set date_detected='2023-11-02 10:15' where id=11;
+update detections set date_detected='2023-11-02 10:15' where id=12;
+update detections set date_detected='2023-11-08 13:45' where id=13;
+update detections set date_detected='2023-11-08 13:45' where id=14;
+update detections set date_detected='2023-11-08 13:45' where id=15;

@@ -29,10 +29,13 @@ app.get("/users", db.getUsers);
 app.get("/unapprovedusers", db.getUnapprovedUsers);
 app.put("/approveusers", db.approveUsers);
 app.get("/detections", db.getDetections);
+app.get("/detections/:id", db.getDetectionById);
 app.get("/removals", db.getRemovals);
 app.post("/users/signup", db.createUser);
 app.post("/users/signin", db.signin);
 app.post("/detections", db.addDetection);
+app.put("/detections/:id", db.updateDetection);
+
 
 const server = app.listen(8080, () => {
     console.log("Server running on port 8080");

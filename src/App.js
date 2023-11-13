@@ -16,6 +16,7 @@ import ForgotPassword from './components/ForgotPassword';
 import AuthService from './services/auth.service';
 import Sidebar from './components/Sidebar.js';
 import Navbar from './components/Navbar.js';
+import Detections from './components/Detections';
 import ChatView from './components/ChatView.js';
 const USER_TYPE = {
     ADMIN: 'admin',
@@ -48,6 +49,7 @@ function App() {
     }, []);
 
     return (
+
         <div className="App" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             {shouldRenderNavbarAndSidebar() && <Navbar id="navbar" />}
             <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
@@ -58,6 +60,7 @@ function App() {
                         <Route path="/chatview" element={<ChatView />} />
                         <Route path="/home" element={<UserElement current_user_type={current_user_type}><Home /></UserElement>} />
                         <Route path="/profile" element={<UserElement current_user_type={current_user_type}><Profile /></UserElement>} />
+                        <Route path="/detections" element={<Detections/>}/>
                         <Route path="/message" element={<UserElement current_user_type={current_user_type}><Chatting /></UserElement>} />
                         <Route path="/unapprovedusers" element={<AdminElement current_user_type={current_user_type}><ApproveUsers /></AdminElement>} />
                         <Route path="/users" element={<AdminElement current_user_type={current_user_type}><Users /></AdminElement>} />

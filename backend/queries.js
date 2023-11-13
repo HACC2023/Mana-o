@@ -153,6 +153,15 @@ function getDetections(request, response) {
    });
 }
 
+function getDetectionById(request, response) {
+   const id = request.params.id;
+   let sql = 'select * from detections where id=' +id;
+   console.log(sql);
+   connection.query(sql, function(err, results) {
+      response.status(200).json(results.rows[0]);
+   })
+}
+
 function getReporters(request, response) {
    let sql = 'select * from reporters';
    connection.query(sql, function(err, results) {
@@ -208,6 +217,57 @@ function updatePassword(email, newPassword, callback) {
    });
 }
 
+function updateDetection(request, response) {
+   const id = request.params.id;
+   const dobor = request.body.dobor;
+   const debrisType = request.body.debrisType;
+   const debrisContainer = request.body.debrisContainer;
+   const boatClaim = request.body.boatClaim;
+   const biofoulingLevel= request.body.biofoulingLevel;
+   const generalDebrisLoc= request.body.generalDebrisLoc;
+   const latitude = request.body.latitude;
+   const longitude = request.body.longitude;
+   const island = request.body.island;
+   const nearestLandmark = request.body.nearestLandmark;
+   const debrisRelLocation = request.body.debrisRelLocation;
+   const debrisDescription = request.body.debrisDescription;
+   const debrisImages = request.body.debrisImages;
+   const geographicRegion = request.body.geographicRegion;
+   const sciOrg = request.body.sciOrg;
+   const sciDocumenter = request.body.sciDocumenter;
+   const sciDebrisType = request.body.sciDebrisType;
+   const debrisPrimaryMaterial = request.body.debrisPrimaryMaterial;
+   const dfadPart = request.body.dfadPart;
+   const docNotes = request.body.docNotes;
+   const photographerName = request.body.photographerName;
+   const animalsPresent = request.body.animalsPresent;
+   const animalsPresentDescription = request.body.animalsPresentDescription;
+   const debrisLength = request.body.debrisLength;
+   const debrisWidth = request.body.debrisWidth;
+   const debrisAvgHeight = request.body.debrisAvgHeight;
+   const debrisMaxHeight = request.body.debrisMaxHeight;
+   const debrisCircumference = request.body.debrisCircumference;
+   const debrisDimensionComments = request.body.debrisDimensionComments;
+
+   let sql = 'select update_detection(' + id + ",'" + dobor + "','" + debrisType +
+      "','" + debrisContainer + "','" + boatClaim + "','" + biofoulingLevel + "','" +
+      generalDebrisLoc + "'," + latitude + "," + longitude +",'" + island + "','" +
+      nearestLandmark + "','" + debrisRelLocation + "','" + debrisDescription + "','" + debrisImages + "','" +
+      geographicRegion + "','" + sciOrg + "','" + sciDocumenter + "','" + sciDebrisType +
+      "','" + debrisPrimaryMaterial + "','" + dfadPart + "','" + docNotes + "','" +
+      photographerName + "','" + animalsPresent + "','" + animalsPresentDescription + "'," +
+      debrisLength + "," + debrisWidth + "," + debrisAvgHeight + "," + debrisMaxHeight + "," +
+      debrisCircumference + ",'" + debrisDimensionComments +"')";
+
+   connection.query(sql, function(err, results){
+      if (err) {
+         console.log(err);
+      }
+      response.status(200).json({message: 'Detection updated'});
+      
+   })
+}
 
 module.exports = { createUser, signin, getUsers, getUnapprovedUsers,
-   getDetections, getReporters, getRemovals, approveUsers, checkExist, updatePassword, addDetection };
+   getDetections, getDetectionById, getReporters, getRemovals,
+   approveUsers, checkExist, updatePassword, addDetection, updateDetection };

@@ -1,4 +1,5 @@
 drop function if exists add_detection;
+drop function if exists update_detection;
 drop function if exists make_dobor_designation;
 
 create or replace function split_string(_text text)
@@ -127,5 +128,52 @@ create or replace function add_detection(_debris_type text,
          end;
       $$
       language 'plpgsql';
-   
+   create or replace function update_detection(_id integer, _dobor text,
+      _debrisType text, _debrisContainer text, _boatClaim text,
+      _biofoulingLevel text, _genDebrisLoc text, _latitude numeric,
+      _longitude numeric, _island text, _nearestLandmark text,
+      _debrisRelLoc text,
+      _debrisDesc text, _debrisImages text, _geoRegion text,
+      _sciOrg text, _sciDocumenter text, _sciDebrisType text,
+      _debrisPrimeMat text, _dfadPart text, _documentNotes text,
+      _photographerName text, _animalsPresent text, _animalsPresentDesc text,
+      _debrisLength numeric, _debrisWidth numeric, _debrisAvgHeight numeric,
+      _debrisMaxHeight numeric, _debrisCircumferenece numeric,
+      _debrisDimComments text)
+      returns void as
+      $$
+         begin
+            update detections set dobor_designation=_dobor,
+               debris_type_detected=_debrisType,
+               debris_container=_debrisContainer,
+               boat_claim = _boatClaim,
+               biofouling_level = _biofoulingLevel,
+               general_debris_location = _genDebrisLoc,
+               latitude = _latitude,
+               longitude = _longitude,
+               island = _island,
+               nearest_landmark = _nearestLandmark,
+               debris_relative_location = _debrisRelLoc,
+               debris_description = _debrisDesc,
+               debris_image_filenames = _debrisImages,
+               geographic_region = _geoRegion,
+               scientific_organization = _sciOrg,
+               scientific_documenter = _sciDocumenter,
+               scientific_debris_type = _sciDebrisType,
+               debris_primary_material = _debrisPrimeMat,
+               dfad_part = _dfadPart,
+               documentation_notes = _documentNotes,
+               photographer_name = _photographerName,
+               animals_present = _animalsPresent,
+               animals_present_description = _animalsPresentDesc,
+               debris_length = _debrisLength,
+               debris_width = _debrisWidth,
+               debris_average_height = _debrisAvgHeight,
+               debris_max_height = _debrisMaxHeight,
+               debris_circumference = _debrisCircumferenece,
+               debris_dimension_comments = _debrisDimComments
+               where id = _id;
+         end;
+      $$
+      language 'plpgsql';
 
