@@ -331,7 +331,6 @@ function deleteUser(request, response) {
 // Add this function in your existing queries.js module
 function updateUser(request, response) {
    const userId = request.params.id;
-   console.log(userId);
    const { firstName, lastName, email, phoneNumber, company, role } = request.body;
 
    const sql = `
