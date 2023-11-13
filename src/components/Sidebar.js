@@ -38,16 +38,17 @@ const Sidebar = ({ current_user_type }) => {
                         <CDBSidebarMenuItem icon="file" onClick={() => navigate('/detection_removals')}>Sign-up for a Removal</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="user" onClick={() => navigate('/profile')}>Profile</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="far fa-comment-dots" onClick={() => navigate('/message')}>Message</CDBSidebarMenuItem>
-                        <CDBSidebarMenuItem icon="sticky-note">Components</CDBSidebarMenuItem>
-                        <CDBSidebarMenuItem icon="chart-line" iconType="solid">
-                            Metrics
-                        </CDBSidebarMenuItem>
-                        <CDBSidebarMenuItem icon="user">User</CDBSidebarMenuItem>
+                        <CDBSidebarMenuItem icon="cog"  onClick={() => navigate('/login')}>Log out</CDBSidebarMenuItem>
+                        {/*<CDBSidebarMenuItem icon="sticky-note">Components</CDBSidebarMenuItem>*/}
+                        {/*<CDBSidebarMenuItem icon="chart-line" iconType="solid">*/}
+                        {/*    Metrics*/}
+                        {/*</CDBSidebarMenuItem>*/}
+                        {/*<CDBSidebarMenuItem icon="user">User</CDBSidebarMenuItem>*/}
 
-                        <CDBSidebarMenuItem icon="envelope">Mail</CDBSidebarMenuItem>
-                        <CDBSidebarMenuItem icon="calendar">Calendar</CDBSidebarMenuItem>
-                        <CDBSidebarMenuItem icon="cog">Settings</CDBSidebarMenuItem>
-                        <CDBSidebarMenuItem icon="bell">Notifications</CDBSidebarMenuItem>
+                        {/*<CDBSidebarMenuItem icon="envelope">Mail</CDBSidebarMenuItem>*/}
+                        {/*<CDBSidebarMenuItem icon="calendar">Calendar</CDBSidebarMenuItem>*/}
+
+                        {/*<CDBSidebarMenuItem icon="bell">Notifications</CDBSidebarMenuItem>*/}
                     </CDBSidebarMenu>
                 </CDBSidebarContent>
                 <CDBSidebarFooter style={{textAlign: 'center'}}>
@@ -55,7 +56,7 @@ const Sidebar = ({ current_user_type }) => {
                         className="sidebar-btn-wrapper"
                         style={{padding: '20px 5px'}}
                     >
-                        Logout
+                        Thank you!
                     </div>
                 </CDBSidebarFooter>
             </CDBSidebar>
