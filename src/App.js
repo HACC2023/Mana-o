@@ -61,10 +61,10 @@ function App() {
                         <Route path="/chatview" element={<ChatView />} />
                         <Route path="/home" element={<UserElement current_user_type={current_user_type}><Home /></UserElement>} />
                         <Route path="/profile" element={<UserElement current_user_type={current_user_type}><Profile /></UserElement>} />
-                        <Route path="/detections" element={<Detections/>}/>
                         <Route path="/message" element={<UserElement current_user_type={current_user_type}><Chatting /></UserElement>} />
                         <Route path="/unapprovedusers" element={<AdminElement current_user_type={current_user_type}><ApproveUsers /></AdminElement>} />
                         <Route path="/users" element={<AdminElement current_user_type={current_user_type}><Users /></AdminElement>} />
+                        <Route path="/detections" element={<AdminElement current_user_type={current_user_type}><Detections/></AdminElement>} />
                         <Route path="/about" element={<About />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />

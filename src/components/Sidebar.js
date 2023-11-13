@@ -28,12 +28,15 @@ const Sidebar = ({ current_user_type }) => {
                             <CDBSidebarMenuItem icon="th-large" onClick={() => navigate('/unapprovedusers')}>
                                 Unapproved Users
                             </CDBSidebarMenuItem>
+                            <CDBSidebarMenuItem icon="th-large" onClick={() => navigate('/detections')}>
+                                Detections
+                            </CDBSidebarMenuItem>
                             </div>
                         ) : <></>}
 
                         <CDBSidebarMenuItem icon="file" onClick={() => navigate('/dobor')}>Dobor Form</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="file" onClick={() => navigate('/detection_removals')}>Sign-up for a Removal</CDBSidebarMenuItem>
-                        <CDBSidebarMenuItem icon="user" onClick={() => navigate('/profile')}>profile</CDBSidebarMenuItem>
+                        <CDBSidebarMenuItem icon="user" onClick={() => navigate('/profile')}>Profile</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="far fa-comment-dots" onClick={() => navigate('/message')}>Message</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="sticky-note">Components</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="chart-line" iconType="solid">
