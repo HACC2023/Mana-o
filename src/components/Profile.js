@@ -11,7 +11,7 @@ export default function Profile() {
     const [users, setUsers] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const [shouldUpdate, setShouldUpdate] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [editFormData, setEditFormData] = useState({
         firstName: '',
@@ -23,6 +23,9 @@ export default function Profile() {
     });
 
     useEffect(() => {
+        fetchData();
+    }, [shouldUpdate]);
+
         const fetchData = async () => {
             try {
                 const response = await UserService.getUsersPageData();
@@ -36,14 +39,12 @@ export default function Profile() {
             }
         };
 
-        fetchData();
-    }, []);
 
     // Check if currentUser exists before accessing its properties
     const currentUser = users ? users.find((e) => e.id === user.id) : null;
 
     const handleEditClick = () => {
-        // Populate edit form data with current user data
+        setShowEditModal(true);
         setEditFormData({
             firstName: currentUser.first_name || '',
             lastName: currentUser.last_name || '',
@@ -53,14 +54,14 @@ export default function Profile() {
             role: currentUser.roles.includes('admin') ? 'admin' : 'user',
         });
 
-        setShowEditModal(true);
     };
 
     const handleEditFormChange = (e) => {
-        setEditFormData({
-            ...editFormData,
-            [e.target.name]: e.target.value,
-        });
+        const { name, value } = e.target;
+        setEditFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
     };
 
     const handleEditCancel = () => {
@@ -73,7 +74,7 @@ export default function Profile() {
 
             const response = await UserService.updateUser(currentUser.id, editFormData);
             console.log('Update successful:', response.data.message);
-
+            console.log(response);
             setShowEditModal(false);
             setEditFormData({
                 firstName: '',
@@ -83,6 +84,7 @@ export default function Profile() {
                 company: '',
                 role: '',
             });
+            setShouldUpdate((prevShouldUpdate) => !prevShouldUpdate);
         } catch (error) {
             console.error('Error updating user:', error);
             console.log('Error status:', error.response.status);
@@ -95,7 +97,7 @@ export default function Profile() {
         <Container className="py-5">
             <Row>
                 <Col>
-                    <h3>{currentUser ? `${currentUser.first_name} ${currentUser.last_name}'s Profile` : 'Loading...'}</h3>
+                    <h3 className="mb-5"> Profile</h3>
                 </Col>
             </Row>
 

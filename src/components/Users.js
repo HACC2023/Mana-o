@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Alert, Button, Modal, Form } from 'react-bootstrap';
 import UserService from '../services/user.service';
+import { FaWhatsapp } from 'react-icons/fa';
+
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -148,6 +150,13 @@ const Users = () => {
         );
     });
 
+    const handleWhatsAppClick = (number) => {
+        number = number.replace(/\D/g, '');// make xxx-xxx-xxxx to xxxxxxxxxx
+        number = `+1${number}`;
+        const whatsappUrl = `https://wa.me/${number}`;
+        window.open(whatsappUrl, '_blank');
+    };
+
     return (
         <Container>
             <h2 className="mt-5 mb-4">Users</h2>
@@ -182,6 +191,13 @@ const Users = () => {
                                                 <b>{user.roles.includes('admin') ? 'Admin' : 'User'}</b>
                                             </Card.Text>
                                             <div className="d-flex justify-content-end">
+                                                <Button
+                                                    variant="success"
+                                                    style={{ marginRight: '50px' }}
+                                                    onClick={() => handleWhatsAppClick(user.phone_number)}
+                                                >
+                                                    <FaWhatsapp /> WhatsApp
+                                                </Button>
                                                 <Button
                                                     variant="primary"
                                                     style={{ marginRight: '10px' }}
