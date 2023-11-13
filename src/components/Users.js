@@ -6,20 +6,20 @@ const Users = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [selectAll, setSelectAll] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [userIdToDelete, setUserIdToDelete] = useState(null);
     const [userIdToEdit, setUserIdToEdit] = useState(null);
     const [userToDelete, setUserToDelete] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [shouldUpdate, setShouldUpdate] = useState(false);
     const [editFormData, setEditFormData] = useState({
         firstName: '',
         lastName: '',
         email: '',
         phoneNumber: '',
         company: '',
-        role: 'user', // default role
+        role: '',
     });
 
     const fetchData = async () => {
@@ -37,7 +37,7 @@ const Users = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [shouldUpdate]);
 
     const handleEditClick = (userId) => {
         setUserIdToEdit(userId);
@@ -51,15 +51,38 @@ const Users = () => {
                 email: userToEdit.email,
                 phoneNumber: userToEdit.phone_number,
                 company: userToEdit.company,
-                role: userToEdit.role || 'user', // default to 'user' if role is not present
+                role: userToEdit.role,
             });
         }
     };
 
-    const handleEditSave = () => {
-        console.log(`Save edited data for user with ID: ${userIdToEdit}`, editFormData);
-        // Add logic to save the edited data
-        setShowEditModal(false);
+    const handleEditSave = async () => {
+        try {
+            const response = await UserService.updateUser(userIdToEdit, editFormData);
+            console.log(response.data.message);
+
+            setUsers((prevUsers) =>
+                prevUsers.map((user) =>
+                    user.id === userIdToEdit ? { ...user, ...editFormData } : user
+                )
+            );
+
+            setShouldUpdate((prevShouldUpdate) => !prevShouldUpdate);
+
+            setShowEditModal(false);
+            setEditFormData({
+                firstName: '',
+                lastName: '',
+                email: '',
+                phoneNumber: '',
+                company: '',
+                role: '',
+            });
+        } catch (error) {
+            console.error('Error updating user:', error);
+            console.log('Error status:', error.response.status);
+            console.log('Error data:', error.response.data);
+        }
     };
 
     const handleEditCancel = () => {
@@ -70,7 +93,7 @@ const Users = () => {
             email: '',
             phoneNumber: '',
             company: '',
-            role: 'user', // default role
+            role: '',
         });
         setShowEditModal(false);
     };
@@ -90,10 +113,17 @@ const Users = () => {
         setShowDeleteModal(true);
     };
 
-    const handleDeleteConfirm = () => {
-        console.log(`Confirmed delete for user with ID: ${userIdToDelete}`);
-        // Add logic to confirm and delete the user
-        setShowDeleteModal(false);
+    const handleDeleteConfirm = async () => {
+        try {
+            await UserService.deleteUser(userIdToDelete);
+            setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userIdToDelete));
+            setShouldUpdate((prevShouldUpdate) => !prevShouldUpdate);
+            setShowDeleteModal(false);
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            console.log('Error status:', error.response.status);
+            console.log('Error data:', error.response.data);
+        }
     };
 
     const handleDeleteCancel = () => {
@@ -101,9 +131,10 @@ const Users = () => {
         setUserIdToDelete(null);
         setShowDeleteModal(false);
     };
+
     const filteredUsers = users.filter((user) => {
         const fullName = `${user.first_name} ${user.last_name}`.toLowerCase();
-        const role = user.roles.includes('admin')?'admin':'user';
+        const role = user.roles.includes('admin') ? 'admin' : 'user';
         const email = user.email.toLowerCase();
         const company = user.company.toLowerCase();
         const phoneNumber = user.phone_number.toLowerCase();
@@ -116,13 +147,14 @@ const Users = () => {
             phoneNumber.includes(searchQuery.toLowerCase())
         );
     });
+
     return (
         <Container>
             <h2 className="mt-5 mb-4">Users</h2>
             {users.length > 0 ? (
                 <div>
                     <Row className="mb-5">
-                        <Col md={{ span: 3, offset: 9}}>
+                        <Col md={{ span: 3, offset: 9 }}>
                             <Form.Group controlId="formSearch">
                                 <Form.Control
                                     type="text"
@@ -134,38 +166,48 @@ const Users = () => {
                         </Col>
                     </Row>
                     {filteredUsers.length > 0 ? (
-                    <Row>
-                        {filteredUsers.map((user) => (
-                            <Col key={user.id} md={4} className="mb-3">
-                                <Card style={{ width: '24rem' }}>
-                                    <Card.Header className="header-bg">
-                                        <h5>{`${user.first_name} ${user.last_name}`}</h5>
-                                    </Card.Header>
-                                    <Card.Body>
-                                        <Card.Text>Email: {user.email}</Card.Text>
-                                        <Card.Text>Phone: {user.phone_number}</Card.Text>
-                                        <Card.Text>Company: {user.company}</Card.Text>
-                                        <Card.Text>Role: <b>{user.roles.includes('admin') ? 'Admin' : 'User'}</b></Card.Text>
-                                        <div className="d-flex justify-content-end">
-                                            <Button variant="primary" style={{ marginRight: '10px' }} onClick={() => handleEditClick(user.id)}>
-                                                Edit
-                                            </Button>
-                                            <Button variant="danger" onClick={() => handleDeleteClick(user.id)}>
-                                                Delete
-                                            </Button>
-                                        </div>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        ))}
-                    </Row>): (
+                        <Row>
+                            {filteredUsers.map((user) => (
+                                <Col key={user.id} md={4} className="mb-3">
+                                    <Card style={{ width: '24rem' }}>
+                                        <Card.Header className="header-bg">
+                                            <h5>{`${user.first_name} ${user.last_name}`}</h5>
+                                        </Card.Header>
+                                        <Card.Body>
+                                            <Card.Text>Email: {user.email}</Card.Text>
+                                            <Card.Text>Phone: {user.phone_number}</Card.Text>
+                                            <Card.Text>Company: {user.company}</Card.Text>
+                                            <Card.Text>
+                                                Role:{' '}
+                                                <b>{user.roles.includes('admin') ? 'Admin' : 'User'}</b>
+                                            </Card.Text>
+                                            <div className="d-flex justify-content-end">
+                                                <Button
+                                                    variant="primary"
+                                                    style={{ marginRight: '10px' }}
+                                                    onClick={() => handleEditClick(user.id)}
+                                                >
+                                                    Edit
+                                                </Button>
+                                                <Button
+                                                    variant="danger"
+                                                    onClick={() => handleDeleteClick(user.id)}
+                                                >
+                                                    Delete
+                                                </Button>
+                                            </div>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
+                            ))}
+                        </Row>
+                    ) : (
                         <div>
                             <Alert variant="info" className="mt-5">
                                 No matching users
                             </Alert>
                         </div>
                     )}
-                    {/* Edit Modal */}
                     <Modal show={showEditModal} onHide={handleEditCancel}>
                         <Modal.Header closeButton>
                             <Modal.Title>Edit User</Modal.Title>
@@ -245,7 +287,6 @@ const Users = () => {
                             </Button>
                         </Modal.Footer>
                     </Modal>
-                    {/* Delete Confirmation Modal */}
                     <Modal show={showDeleteModal} onHide={handleDeleteCancel}>
                         <Modal.Header closeButton>
                             <Modal.Title>Delete Confirmation</Modal.Title>

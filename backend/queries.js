@@ -303,8 +303,88 @@ function addRemoval(request, response) {
       response.status(201).json({ message: 'Removal added' });
    });
 }
+function deleteRoles(userId, callback) {
+   const deleteRolesQuery = 'DELETE FROM user_role WHERE user_id = $1';
+   connection.query(deleteRolesQuery, [userId], function(err, results) {
+      if (err) {
+         console.error(err);
+         callback(err);
+      } else {
+         callback(null);
+      }
+   });
+}
+
+function deleteUser(request, response) {
+   const userId = request.params.id;
+   const sql = 'DELETE FROM users WHERE id = $1';
+   connection.query(sql, [userId], function(err, results) {
+      if (err) {
+         console.error(err);
+         response.status(500).json({ message: 'Internal Server Error' });
+      } else {
+         response.status(204).send();
+      }
+   });
+}
+
+// Add this function in your existing queries.js module
+function updateUser(request, response) {
+   const userId = request.params.id;
+   const { firstName, lastName, email, phoneNumber, company, role } = request.body;
+
+   const sql = `
+        UPDATE users
+        SET
+            first_name = $1,
+            last_name = $2
+        WHERE id = $3
+    `;
+
+   connection.query(
+       sql,
+       [firstName, lastName, userId],
+       function (err, results) {
+          if (err) {
+             console.error(err);
+             response.status(500).json({ message: 'Internal Server Error' });
+          } else {
+             let userRoleSql;
+
+             if (role === "admin") {
+                userRoleSql = `
+                        INSERT INTO user_role (user_id, role_id)
+                        VALUES ($1, 1)
+                        ON CONFLICT (user_id, role_id) DO NOTHING;
+                    `;
+             } else {
+                userRoleSql = `
+                        DELETE FROM user_role
+                        WHERE user_id = $1
+                          AND role_id = 1;
+                    `;
+             }
+
+             // Execute the userRoleSql query
+             connection.query(
+                 userRoleSql,
+                 [userId],
+                 function (err, results) {
+                    if (err) {
+                       console.error(err);
+                       response.status(500).json({ message: 'Error updating user role' });
+                    } else {
+                       response.status(200).json({ message: 'User and role updated successfully' });
+                    }
+                 }
+             );
+          }
+       }
+   );
+}
 
 module.exports = { createUser, signin, getUsers, getUnapprovedUsers,
    getDetections, getDetectionById, getReporters, getRemovals,
    approveUsers, checkExist, updatePassword, addDetection, updateDetection, addRemoval,
-   getDetectionRemovals};
+   getDetectionRemovals, deleteUser, deleteRoles, updateUser};
+

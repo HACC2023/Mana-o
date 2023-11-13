@@ -32,6 +32,15 @@ const getDetectionRemovals = () => {
   return axios.get(API_URL + "detection_removals", { headers: authHeader()});
 }
 
+
+const deleteUser = (userId) => {
+  return axios.delete(API_URL + `users/${userId}`, { headers: authHeader() });
+};
+
+const updateUser = (userId, userData) => {
+  return axios.put(API_URL + `users/${userId}`, userData, { headers: authHeader() });
+};
+
 const UserService = {
   getPublicContent,
   getUsersPageData,
@@ -40,7 +49,10 @@ const UserService = {
   getDetectionById,
   getUnapprovedUsers,
   updatedApprovedStatus,
-  getDetectionRemovals
+  getDetectionRemovals,
+  deleteUser,
+  updateUser
+
 };
 
 export default UserService;
