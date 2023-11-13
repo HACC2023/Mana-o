@@ -331,19 +331,23 @@ function deleteUser(request, response) {
 // Add this function in your existing queries.js module
 function updateUser(request, response) {
    const userId = request.params.id;
+   console.log(userId);
    const { firstName, lastName, email, phoneNumber, company, role } = request.body;
 
    const sql = `
         UPDATE users
         SET
             first_name = $1,
-            last_name = $2
-        WHERE id = $3
+            last_name = $2,
+            email = $3,
+            phone_number = $4,
+            company = $5
+        WHERE id = $6
     `;
 
    connection.query(
        sql,
-       [firstName, lastName, userId],
+       [firstName, lastName,email, phoneNumber, company, userId],
        function (err, results) {
           if (err) {
              console.error(err);
