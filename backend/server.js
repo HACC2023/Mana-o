@@ -48,17 +48,22 @@ const io = require('socket.io')(server, {
 io.on("connection", (socket) => {
     console.log(`A user connected": ${socket.id}`);
 
-    socket.on("join room", (room) => {
+    socket.on("join channel", (channel) => {
         // Join the specified room
-        socket.join(room);
-        console.log(`User with ID: ${socket.id} joined room: ${room}`);
+        socket.join(channel);
+        console.log(`User with ID: ${socket.id} joined channel: ${channel}`);
+    });
+
+    socket.on("leave channel", (channel) => {
+        socket.leave(channel);
+        console.log(`User with ID: ${socket.id} left channel: ${channel}`);
     });
 
     socket.on("chat message", (data) => {
         console.log(data);
         console.log("Received message from client:", data.message);
         // Broadcast the message to all connected clients, including the sender
-        socket.to(data.room).emit("receive message", data);
+        socket.to(data.channel).emit("receive message", data);
         //socket.emit("reveive message", message);
     });
 
