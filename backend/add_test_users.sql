@@ -1,4 +1,4 @@
-select addUser('Taryn', 'Takebayashi', 'none', 'tarynet@hawaii.edu', 
+select addUser('Taryn', 'Takebayashi', 'none', 'feimei@hawaii.edu',
    'tarynpass', '000-111-2222');
 update users set approved = true where id=1;
 insert into user_role (user_id, role_id) values (1,1);

@@ -4,8 +4,8 @@ const config = require("../config/auth.config.js");
 
 const connection = new pg.Pool({
    host: '127.0.0.1',
-   user: 'taryn',
-   password: 'tarynpass',
+   user: 'feimei',
+   password: 'feimei',
    database: 'honua'
 });
 

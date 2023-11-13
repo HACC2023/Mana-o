@@ -17,7 +17,6 @@ import AuthService from './services/auth.service';
 import Sidebar from './components/Sidebar.js';
 import Navbar from './components/Navbar.js';
 import Detections from './components/Detections';
-import ChatView from './components/ChatView.js';
 import DetectionRemovals from './components/DetectionRemovals';
 const USER_TYPE = {
     ADMIN: 'admin',
@@ -58,7 +57,6 @@ function App() {
                 <div className="main-content" style={{ flex: 1, overflowY: 'auto', height: contentHeight }}>
                     <Routes>
                         <Route path="/" element={<Landing />} />
-                        <Route path="/chatview" element={<ChatView />} />
                         <Route path="/home" element={<UserElement current_user_type={current_user_type}><Home /></UserElement>} />
                         <Route path="/profile" element={<UserElement current_user_type={current_user_type}><Profile /></UserElement>} />
                         <Route path="/message" element={<UserElement current_user_type={current_user_type}><Chatting /></UserElement>} />

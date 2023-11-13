@@ -129,7 +129,7 @@ const Chatting = () => {
                                     <div className="card-body text-success">
                                         <h5 className="card-title">This is a Group Meeting room</h5>
                                         <p className="card-text">
-                                            Enter Your Room name
+                                            Enter Your Room Name
                                         </p>
                                         <input
                                             type="text"
