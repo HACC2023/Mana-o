@@ -212,4 +212,16 @@ app.post("/sendRegisterEmail", (req, res) => {
     });
 });
 
+app.delete("/users/:id", (req, res) => {
+    const userId = req.params.id;
 
+    db.deleteRoles(userId, function (err) {
+        if (err) {
+            return res.status(500).json({ error: "Error deleting roles" });
+        }
+
+        db.deleteUser(req, res);
+    });
+});
+
+app.put("/users/:id", db.updateUser);

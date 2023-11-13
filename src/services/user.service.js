@@ -29,6 +29,15 @@ const updatedApprovedStatus = (approvedUserIds) => {
   return axios.put(API_URL + "approveusers", {approvedUserIds});
 }
 
+
+const deleteUser = (userId) => {
+  return axios.delete(API_URL + `users/${userId}`, { headers: authHeader() });
+};
+
+const updateUser = (userId, userData) => {
+  return axios.put(API_URL + `users/${userId}`, userData, { headers: authHeader() });
+};
+
 const UserService = {
   getPublicContent,
   getUsersPageData,
@@ -36,7 +45,9 @@ const UserService = {
   getDetections,
   getDetectionById,
   getUnapprovedUsers,
-  updatedApprovedStatus
+  updatedApprovedStatus,
+  deleteUser,
+  updateUser
 };
 
 export default UserService;
