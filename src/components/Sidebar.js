@@ -21,7 +21,7 @@ const Sidebar = ({ current_user_type }) => {
                 </CDBSidebarHeader>
                 <CDBSidebarContent>
                     <CDBSidebarMenu>
-                        <CDBSidebarMenuItem icon="home" onClick={() => navigate('/home')}>home</CDBSidebarMenuItem>
+                        <CDBSidebarMenuItem icon="home" onClick={() => navigate('/home')}>Home</CDBSidebarMenuItem>
                         {current_user_type.length > 0 && current_user_type.includes('admin') ? (
                             <div>
                             <CDBSidebarMenuItem icon="users" onClick={() => navigate('/users')}>Users</CDBSidebarMenuItem>
@@ -32,6 +32,7 @@ const Sidebar = ({ current_user_type }) => {
                         ) : <></>}
 
                         <CDBSidebarMenuItem icon="file" onClick={() => navigate('/dobor')}>Dobor Form</CDBSidebarMenuItem>
+                        <CDBSidebarMenuItem icon="file" onClick={() => navigate('/detection_removals')}>Sign-up for a Removal</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="user" onClick={() => navigate('/profile')}>profile</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="far fa-comment-dots" onClick={() => navigate('/message')}>Message</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="sticky-note">Components</CDBSidebarMenuItem>

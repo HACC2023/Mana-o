@@ -18,6 +18,7 @@ import Sidebar from './components/Sidebar.js';
 import Navbar from './components/Navbar.js';
 import Detections from './components/Detections';
 import ChatView from './components/ChatView.js';
+import DetectionRemovals from './components/DetectionRemovals';
 const USER_TYPE = {
     ADMIN: 'admin',
     USER: 'user',
@@ -69,6 +70,7 @@ function App() {
                         <Route path="/register" element={<Register />} />
                         <Route path="/testmap" element={<TestMap />} />
                         <Route path="/dobor" element={<Dobor />} />
+                        <Route path="/detection_removals" element={<UserElement current_user_type={current_user_type}><DetectionRemovals/></UserElement>} />
                         <Route path="/forgotpassword" element={<ForgotPassword />} />
                         <Route path="*" element={<Navigate to="/" />} />
                     </Routes>

@@ -31,10 +31,12 @@ app.put("/approveusers", db.approveUsers);
 app.get("/detections", db.getDetections);
 app.get("/detections/:id", db.getDetectionById);
 app.get("/removals", db.getRemovals);
+app.post("/removals", db.addRemoval);
 app.post("/users/signup", db.createUser);
 app.post("/users/signin", db.signin);
 app.post("/detections", db.addDetection);
 app.put("/detections/:id", db.updateDetection);
+app.get("/detection_removals", db.getDetectionRemovals);
 
 
 const server = app.listen(8080, () => {

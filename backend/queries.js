@@ -162,6 +162,13 @@ function getDetectionById(request, response) {
    })
 }
 
+function getDetectionRemovals(request, response) {
+   let sql = 'select * from detection_removals_view';
+   connection.query(sql, function(err, results) {
+      response.status(200).json(results.rows);
+   });
+}
+
 function getReporters(request, response) {
    let sql = 'select * from reporters';
    connection.query(sql, function(err, results) {
@@ -268,6 +275,36 @@ function updateDetection(request, response) {
    })
 }
 
+function addRemoval(request, response) {
+   const det_id = request.body.detection_id;
+   const email = request.body.contractor_email;
+   const date_removed = request.body.date_removed;
+   const latitude = request.body.latitude;
+   const longitude = request.body.longitude;
+   const gen_loc = request.body.general_location;
+   const environment = request.body.environment;
+   const visual_estimation = request.body.visual_estimate;
+   const wildlife_entanglement = request.body.wildlife_entanglement;
+   const num_people = request.body.number_people_involved;
+   const fishtime_lost = request.body.fisherman_time_lost;
+   const removal_technique = request.body.removal_technique;
+   const removal_photos_exist = request.body.removal_photos_exist;
+   let sql = 'select add_removal(' + Number(det_id) + ",'" + 
+      email + "','" + date_removed + "'," + latitude + "," + longitude 
+      + ",'" + gen_loc + "','" + environment + "','" + visual_estimation 
+      + "','" + wildlife_entanglement + "'," + num_people + "," 
+      + fishtime_lost + ",'" + removal_technique + "','" + 
+      removal_photos_exist + "')";
+   console.log(sql);
+   connection.query(sql, function(err, results) {
+      if (err) {
+         console.log(err);
+      }
+      response.status(201).json({ message: 'Removal added' });
+   });
+}
+
 module.exports = { createUser, signin, getUsers, getUnapprovedUsers,
    getDetections, getDetectionById, getReporters, getRemovals,
-   approveUsers, checkExist, updatePassword, addDetection, updateDetection };
+   approveUsers, checkExist, updatePassword, addDetection, updateDetection, addRemoval,
+   getDetectionRemovals};

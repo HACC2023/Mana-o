@@ -17,7 +17,7 @@ create table detections(
    debris_type_detected text,
    debris_container text,
    boat_claim text,
-   biofouling_level text,
+   biofouling_level numeric(2),
    general_debris_location text,
    latitude numeric(12,7),
    longitude numeric(12,7),
@@ -35,7 +35,7 @@ create table detections(
    dfad_part text,
    documentation_notes text,
    photographer_name text,
-   animals_present text,
+   animals_present boolean,
    animals_present_description text,
    debris_length numeric(10,2),
    debris_width numeric(10,2),
@@ -68,12 +68,12 @@ create table removals(
    longitude numeric(12,7) default null,
    general_location text,
    environment text,
-   visual_estimate text,
+   visual_estimate numeric,
    wildlife_entanglement text,
    number_people_involved int,
    fisherman_time_lost numeric(4,1) default null,
    removal_technique text,
-   removal_photos_exist boolean,
+   removal_photos_exist text,
    primary key (id)
 );
    

@@ -28,6 +28,9 @@ const getUnapprovedUsers = () => {
 const updatedApprovedStatus = (approvedUserIds) => {
   return axios.put(API_URL + "approveusers", {approvedUserIds});
 }
+const getDetectionRemovals = () => {
+  return axios.get(API_URL + "detection_removals", { headers: authHeader()});
+}
 
 const UserService = {
   getPublicContent,
@@ -36,7 +39,8 @@ const UserService = {
   getDetections,
   getDetectionById,
   getUnapprovedUsers,
-  updatedApprovedStatus
+  updatedApprovedStatus,
+  getDetectionRemovals
 };
 
 export default UserService;
