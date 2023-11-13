@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import AuthService from '../services/auth.service';
 import {
     CDBSidebar,
     CDBSidebarContent,
@@ -12,6 +13,11 @@ import {
 const Sidebar = ({ current_user_type }) => {
     const navigate = useNavigate();
     const [openBasic, setOpenBasic] = useState(false);
+
+    const handleLogout = () => {
+        AuthService.logout();
+        navigate('/login');
+    }
 
     return (
         <div style={{height: '100vh', display: 'flex', flexDirection: 'column'}}>
@@ -38,7 +44,7 @@ const Sidebar = ({ current_user_type }) => {
                         <CDBSidebarMenuItem icon="file" onClick={() => navigate('/detection_removals')}>Sign-up for a Removal</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="user" onClick={() => navigate('/profile')}>Profile</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="far fa-comment-dots" onClick={() => navigate('/message')}>Message</CDBSidebarMenuItem>
-                        <CDBSidebarMenuItem icon="cog"  onClick={() => navigate('/login')}>Log out</CDBSidebarMenuItem>
+                        <CDBSidebarMenuItem icon="cog"  onClick={handleLogout}>Log out</CDBSidebarMenuItem>
                         {/*<CDBSidebarMenuItem icon="sticky-note">Components</CDBSidebarMenuItem>*/}
                         {/*<CDBSidebarMenuItem icon="chart-line" iconType="solid">*/}
                         {/*    Metrics*/}
