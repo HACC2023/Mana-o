@@ -15,11 +15,38 @@ To test out an Admin, you can use tarynet@hawaii.edu and password is "tarynpass"
 
 ### Table of Contents
 * [About Mālama Honua](#about-mālama-honua)
+* [Technologies and Motivations for their Usage](#technologies)
 * [How to Use](#how-to-use)
 
 
 ### About Mālama Honua
 Our team name is Manaʻo meaning “thought” or “idea”, as our goal is to gain insight in solving complex real-world problems through software engineering. Our application, Mālama Honua, meaning “to take care of the Earth”, is a responsive web application with multiple levels of user access, allowing for real-time updates on large marine debris reports and the seven steps it takes to dispose or repurpose the trash into useful products. It features a relational database with an easy UI for administrative access and a chat feature that allows for communication between the removal organization staff. Technologies used: React with JWT Authentication, Node.js Express, PostgreSQL, Bootstrap and socket.io for the in-app chat.
+### Technologies
+#### Back-end: PostgreSQL Database
+* Open-source
+
+* Underlying scripting language, allowing solving at the database level
+Replaces the need for middleware that blocks requests that cause the server to halt
+
+* Why a Relational Database?
+The data involves different kinds of objects so a relational database that links these objects makes it more efficient to query the data
+
+#### Front-end: React.js, Bootstrap, CSS, DataTables
+* React.js allows for pages that are responsive and highly user-interactive
+* Can make changes on the Client side without needing to re-render from the backend, leading to a more satisfying user experience
+* Bootstrap: Default styling gives uniform appearance that can be customized with CSS 
+* DataTables: Allows for easy filtering and sorting without needing to query database directly
+
+#### Security: Node.js, Express.js, JWT Authentication, PL/pgSQL functions
+* Node.js Express server: Can configure service to only accept requests from a particular domain
+* JWT Authentication: The access tokens created prevents visiting important pages without logging in, preventing CSRF attacks. Can control which pages each type of user can access.
+* When inserting into the PostgreSQL database, PL/pgSQL functions filter any text input from users to prevent SQL injection attacks
+* Database is being served on a different server from the application server
+* Passwords are salted and hashed
+
+#### Chat Functionality: socket.io, WhatsApp
+* Built a simple chat application using Socket.io and Express.js to allow users to converse with each other more easily.This is to fulfil the sponsor’s request for a dispatch communication tool
+* Also allow for accessing WhatsApp because this is what the sponsor used to use for communications
 
 ### How To Use
 The following is a walk-through guide of Mālama Honua's features.
