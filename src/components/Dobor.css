@@ -1,0 +1,47 @@
+
+.dobor {
+    background-color: #CAD2E9;
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    min-height:100vh;
+    padding-bottom: 60px;
+}
+.card{
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 90%;
+    max-width:1000px;
+    margin: 0 auto;
+}
+
+#doborQ {
+    position: relative;
+    justify-content:center;
+    align-items: center;
+    display:block;
+    flex-direction:column;
+    margin: 0 auto;
+    padding: 10px;
+}
+.newline-label {
+    text-align:left;
+    display: block;
+    margin-bottom: 10px;
+    width:100%;
+}
+.custom-dropdown {
+    width: 100%;
+    max-width: 300px;
+}
+.remove-button {
+    border:none;
+    justify-content:center;
+    margin: 0 auto;
+    display:block;
+}
+.remove-button:hover {
+    background-color:#bbbbbb;
+}

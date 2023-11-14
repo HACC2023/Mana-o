@@ -1,0 +1,43 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@media screen and (max-width: 1366px) {
+  body p {
+    font-size: 30px;
+  }
+}
+@media screen and (max-width: 1024px) {
+  body p {
+    font-size: 20px;
+  }
+}
+@media screen and (max-width: 768px) {
+  body p {
+    font-size: 10px;
+  }
+}
+@media screen and (max-width: 480px) {
+  body p {
+    font-size: 8px;
+  }
+}
+.responsive {
+  width: 30vw;
+  height: 30vh;
+}
