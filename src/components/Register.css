@@ -1,0 +1,56 @@
+.register{
+    background-color: #CAD2E9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height:100vh;
+    .card{
+        background-color: #FFFFFF;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        
+        & img {
+            display: block;
+            margin: 0 auto;
+        }
+        & form {
+            display: flex;
+            flex-direction: column;
+            gap: 10 px;
+        }
+        & input{
+            border: 2px solid lightgrey;
+            border-radius: 5 px;
+            padding: 10px 10px;
+            display: block;
+            margin: 0 auto;
+        }
+        .custom-alert {
+            width:80%;
+            display: block;
+            margin: 0 auto;
+        }
+        .button-text-h3 {
+            font-size:1.5rem;
+        }
+        width: 90%;
+        margin: 0 auto;
+        
+    }
+.row{
+    margin-right: 30px;
+    margin-left: 30px;
+}
+.custom-button {
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+    height: 50px;
+    background-color: #527CEC;
+    color: #FFFFFF;
+&:hover {
+     background-color:blue;
+ }
+}
+}

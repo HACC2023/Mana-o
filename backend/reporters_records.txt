@@ -1,0 +1,22 @@
+id|last_name|first_name|email|address|city|state|zipcode|phone_number
+1|Davis|Alberto|alberto.davis@gmail.com|2265 Emma Street|Honolulu|HI|96814|808-218-5329
+2|Sparks|Nora|nora.sparks@gmail.com|2882 Arron Smith Drive|Ewa Beach|HI|96706|808-499-2984
+3|Rogers|Pamela|pamela.rogers@gmail.com|3216 Randall Drive|Honokaa|HI|96727|808-775-9442
+4|Johnson|Jack|jack.johnson@gmail.com|1905 Stratford Drive|Honolulu|HI|96814|808-386-4695
+5|Woodard|Mark|mark.woodard@gmail.com|318 E Kawili Street|Hilo|HI|96720|808-876-3403
+6|Manzano|Sharon|sharon.manzano@gmail.com|200 Inia Lane|Hilo|HI|96720|808-778-9972
+7|Garza|Pamela|pamela.garza@gmail.com|2970 Haleko Road|Lihue|HI|96766|808-274-7118
+8|Vila|Steven|steven.villa@gmail.com|5095 Napilihau Street|Lahaina|HI|96761|808-661-1759
+9|Hopkins|Robert|robert.hopkins@gmail.com|8 Kaapeha Place|Makawao|HI|96768|808-572-7146
+10|Stapleton|Leilani|leilani.stapleton@gmail.com|100 Ani Street|Kahului|HI|96732|808-871-6000
+11|Ayers|Mahina|mahina.ayers@gmail.com|784 Front Street|Lahaina|HI|96761|808-661-1759
+12|McCurry|Anthony|anthony.mccurry@gmail.com|1733 Wili Pa Loop|Wailuku|HI|96793|808-249-8188
+13|Lewis|William|william.lewis@gmail.com|2701 Hili Place|Lihue|HI|96766|808-346-6755
+14|Peterson|Vanessa|vanessa.peterson@gmail.com|620 Jacaranda Street|Lanai City|HI|96763|808-383-0870
+15|Williams|Ikaika|ikaika.williams@gmail.com|PO Box 630681|Lanai City|HI|96763|808-220-1244
+16|Parker|Keoni|keoni.parker@gmail.com|2300 Kamehameha V Hwy|Kaunakakai|HI|96748|808-205-4214
+17|Reagan|Rita|rita.reagan@gmail.com|HC 1 Box 550|Kaunakakai|HI|96748|808-381-0462
+18|Wright|Joan|joan.wright@gmail.com|2 Maunaloa Rd|Maunaloa|HI|96770|808-497-5847
+19|Cook|Elena|elena.cook@gmail.com|1 Mill Street|Hana|HI|96713|808-248-9692
+20|Stokes|Edward|edward.stokes@gmail.com|5-5226 Kuhio Hwy Unit 121|Hanalei|HI|96714|808-271-1621
+(20 rows)
