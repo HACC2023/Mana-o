@@ -3,9 +3,12 @@
 </div>
 
 ### Deployment
-
-Please go to test-03 branch for the latest code. (Note: 11/13/2023 3:24 am)
 Our code is deployed at https://malamahonua.space/
+
+11/13/2023 3:24 am Code was pushed from private repository to test-03 branch of this repository
+11/13/2023 10:48 pm Code was brought from test-03 branch into main. So, you can use main if you choose to clone this project.
+
+
 
 To test out a regular user (Contractor) login, you can use jane.doe@gmail.com and password is "janepass".
 You can also create your own regular user by registering. However, please contact the developers (Team: Mana-o; tarynet@hawaii.edu) if you want to be approved as a new user.
