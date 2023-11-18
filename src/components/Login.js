@@ -6,7 +6,7 @@ import { Nav, NavItem } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapLocationDot, faDroplet, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
-import { faEnvelope, faLock, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faLock, faEye, faFile, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 import "./Login.css";
 
@@ -23,6 +23,11 @@ const Login = () => {
             route: "/about",
             icon: faDroplet,
             label: "About",
+        },
+        {
+            route: "/dobor",
+            icon: faFile,
+            label: "DOBOR"
         },
         {
             route: "/login",

@@ -30,7 +30,7 @@ function App() {
     const [contentHeight, setContentHeight] = useState(0);
 
     const shouldRenderNavbarAndSidebar = () => {
-        const excludedRoutes = ['/', '/about', '/login', '/register', '/testmap', '/forgotpassword'];
+        const excludedRoutes = ['/', '/about', '/dobor','/login', '/register', '/testmap', '/forgotpassword'];
         return !excludedRoutes.includes(location.pathname);
     };
 
@@ -67,7 +67,8 @@ function App() {
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/testmap" element={<TestMap />} />
-                        <Route path="/dobor" element={<Dobor />} />
+                        <Route path="/dobor_app" element={<UserElement current_user_type={current_user_type}><Dobor /></UserElement>} />
+                        <Route path="/dobor" element={<Dobor/>} />
                         <Route path="/detection_removals" element={<UserElement current_user_type={current_user_type}><DetectionRemovals/></UserElement>} />
                         <Route path="/forgotpassword" element={<ForgotPassword />} />
                         <Route path="*" element={<Navigate to="/" />} />

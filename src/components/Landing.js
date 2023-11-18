@@ -3,7 +3,7 @@ import {Container} from "react-bootstrap";
 import {Nav, NavItem} from "reactstrap";
 import {NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMapLocationDot, faDroplet, faRightToBracket} from "@fortawesome/free-solid-svg-icons";
+import {faMapLocationDot, faDroplet, faFile, faRightToBracket} from "@fortawesome/free-solid-svg-icons";
 import "./Landing.css";
 
 const Landing = () => {
@@ -19,6 +19,11 @@ const Landing = () => {
             label: "About"
         },
         {
+            route: "/dobor",
+            icon: faFile,
+            label: "DOBOR"
+        },
+        {
             route : "/login",
             icon: faRightToBracket,
             label: "Login"
@@ -26,12 +31,14 @@ const Landing = () => {
 
     ]
     return(
-        <div className = "landing">
+        <div className = "landing" style={{height: '100%'}}>
             <Container>
                 {/*Landing page content*/}
-                <div className = "landing-content">
+                <div className = "landing-content" width="100%" height="100%">
                     <h1>Documented Locations of Significant Marine Debris</h1>
-                <img src="/images/TemporaryMap.png" alt="placeholder-map-img" width="90%" height="90%"/>
+                    <iframe frameborder='0' locate={1} add={1} style={{width: '100%', height:'700px'}}
+                        x={-157.88} y={22.426}
+                        src='//www.zeemaps.com/pub?group=4844737'> </iframe>
                 </div>
             </Container>
             {/*Bottom Navigation Bar*/}

@@ -40,7 +40,7 @@ const Sidebar = ({ current_user_type }) => {
                             </div>
                         ) : <></>}
 
-                        <CDBSidebarMenuItem icon="file" onClick={() => navigate('/dobor')}>Dobor Form</CDBSidebarMenuItem>
+                        <CDBSidebarMenuItem icon="file" onClick={() => navigate('/dobor_app')}>Dobor Form</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="file" onClick={() => navigate('/detection_removals')}>Sign-up for a Removal</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="user" onClick={() => navigate('/profile')}>Profile</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="far fa-comment-dots" onClick={() => navigate('/message')}>Message</CDBSidebarMenuItem>

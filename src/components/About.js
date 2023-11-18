@@ -3,7 +3,7 @@ import {Container} from "react-bootstrap";
 import {Nav, NavItem} from "reactstrap";
 import {NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMapLocationDot, faDroplet, faRightToBracket} from "@fortawesome/free-solid-svg-icons";
+import {faMapLocationDot, faDroplet, faFile, faRightToBracket} from "@fortawesome/free-solid-svg-icons";
 import './About.css';
 
 const About = () => {
@@ -17,6 +17,11 @@ const About = () => {
             route : "/about",
             icon: faDroplet,
             label: "About"
+        },
+        {
+            route: "/dobor",
+            icon: faFile,
+            label: "DOBOR"
         },
         {
             route : "/login",

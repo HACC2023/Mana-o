@@ -2,10 +2,16 @@ import React, {useState, useEffect} from "react";
 import Form from "react-validation/build/form";
 import {Container, Row, Col} from "react-bootstrap";
 import './Dobor.css';
+import {useNavigate} from 'react-router-dom';
+import { Nav, NavItem } from "reactstrap";
+import { NavLink } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { icon } from "leaflet";
 import axios from "axios";
 
 const Dobor = () =>{
+    const navigate = useNavigate();
     
    
     const [question1, setQuestion1] = useState({
@@ -393,7 +399,14 @@ const Dobor = () =>{
            state,
            zip,
            phone,
-        });
+        })
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user == null){
+            navigate('/landing');
+        }
+        else {
+            navigate('/home');
+        }
         /*console.log('Question 1 - Other Debris:', question1.otherDebris);
         console.log('Question 2 - Container:', question2.selectedOption);
         console.log('Question 3 - Boat:', question3.selectedOption);
@@ -403,6 +416,7 @@ const Dobor = () =>{
         console.log('Question 6 - Island:', question6.selectedIsland);*/
         
     };
+    
     const debrisTypeOptions = [
         "A mass of netting and/or other fishing gear",
         "An abandoned/derelict boat",
@@ -839,6 +853,23 @@ const Dobor = () =>{
                         </Form>
                             </Col>
                         </Row>
+                        {/*Bottom Navigation Bar*/}
+                        <nav className = "navbar fixed-bottom navbar-light bottom-tab-nav" role="navigation">
+                            <Nav className = "w-100">
+                                <div className = "d-flex flex-row justify-content-around w-100">
+                                    {
+                                        <NavItem>
+                                            <NavLink to="/home" className="nav-link bottom-nav-link" activeClassName="active">
+                                                <div className="row d-flex flex-column justify-content-center align-items-center">
+                                                    <FontAwesomeIcon size="lg" icon={faCircleLeft}/>
+                                                </div>
+                                            </NavLink>
+                                        </NavItem>
+
+                                    }
+                                </div>
+                            </Nav>
+                        </nav>
                     </div>
                 </Container>
             </div>
