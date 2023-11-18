@@ -3,6 +3,7 @@ drop function if exists make_dobor_designation;
 drop function if exists update_detection;
 drop function if exists update_approved_users;
 drop function if exists add_removal;
+drop function if exists update_removal;
 
 create or replace function split_string(_text text)
    returns bool as
@@ -119,32 +120,61 @@ create or replace function add_detection(_debris_type text,
    language 'plpgsql';
 
    create or replace function add_removal(_detect_id integer, _email text, _date_rem date,
-   _lat numeric(12,7), _long numeric(12,7), _gen_loc text, _enviro text, 
-   _vis_est numeric, _wild_entangle text, _num_people integer,
+    _lat numeric(12,7), _long numeric(12,7), _gen_loc text, _enviro text, 
+    _vis_est numeric, _wild_entangle text, _num_people integer,
     _fishtime_lost numeric(4,1),_rem_tech text, _rem_photos_exist text)
-   returns boolean as
-   $$
-      declare
-         _removal_id integer;
-         _sql text;
-      begin
-         _sql := 'insert into removals (detection_id, contractor_email, date_removed,
-            latitude, longitude, general_location, environment, visual_estimate, 
-            wildlife_entanglement, number_people_involved, fisherman_time_lost,
-            removal_technique, removal_photos_exist) values (' 
-            || _detect_id || ',' || quote_literal(_email) ||
-            ',' || quote_literal(_date_rem) || ',' || _lat || 
-            ',' || _long || ',' || quote_literal(_gen_loc) || 
-            ',' || quote_literal(_enviro) || ',' || quote_literal(_vis_est) ||
-            ',' || quote_literal(_wild_entangle) || ',' || _num_people  
-            || ',' || _fishtime_lost || ',' || quote_literal(_rem_tech) || 
-            ',' || quote_literal(_rem_photos_exist) || ')';
-         execute(_sql);   
-         return true;
+    returns integer as
+    $$
+        declare
+            rec record;
+            _removal_id integer;
+            _sql text;
+        begin
+            select * into rec from removals where detection_id=_detect_id;
+            if found then
+                _removal_id = rec.id;
+                perform update_removal(_removal_id,_detect_id, _email, _date_rem,
+                    _lat, _long, _gen_loc, _enviro, _vis_est, _wild_entangle,
+                    _num_people, _fishtime_lost, _rem_tech, _rem_photos_exist);
+            else 
+                execute format('insert into removals (detection_id, contractor_email,'
+                    ' date_removed, latitude, longitude, general_location, '
+                    'environment, visual_estimate, wildlife_entanglement, '
+                    'number_people_involved, fisherman_time_lost, removal_technique, '
+                    'removal_photos_exist) values ($1, $2, $3, $4, $5, $6, '
+                    '$7, $8, $9, $10, $11, $12, $13)') using _detect_id, _email, 
+                    _date_rem, _lat, _long, _gen_loc, _enviro, _vis_est, 
+                    _wild_entangle, _num_people, _fishtime_lost, _rem_tech,
+                    _rem_photos_exist;
+                _removal_id := currval('removals_id_seq');
+                update detections set removal_id=_removal_id where id=_detect_id;
+            end if;
+         return _removal_id;
       end;
    $$
    language 'plpgsql';
    
+   create or replace function update_removal(_removal_id integer,_detect_id integer, 
+    _email text, _date_rem date, _lat numeric(12,7), _long numeric(12,7), 
+    _gen_loc text, _enviro text, _vis_est numeric, _wild_entangle text, 
+    _num_people integer, _fishtime_lost numeric(4,1),_rem_tech text, 
+    _rem_photos_exist text)
+    returns boolean as
+    $$
+        begin
+            execute format('update removals set contractor_email=$1,'
+                'date_removed=$2, latitude=$3, longitude=$4,'
+                'general_location=$5, environment=$6, visual_estimate=$7,'
+                'wildlife_entanglement=$8, number_people_involved=$9,'
+                'fisherman_time_lost=$10, removal_technique=$11,'
+                'removal_photos_exist=$12 where id=$13') using _email, _date_rem,
+                _lat, _long, _gen_loc, _enviro, _vis_est, _wild_entangle,
+                _num_people, _fishtime_lost, _rem_tech, _rem_photos_exist, _removal_id;
+            return true;
+        end;
+    $$
+    language 'plpgsql';
+
    create or replace function update_approved_users(_ids integer[])
       returns boolean as
       $$

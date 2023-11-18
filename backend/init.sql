@@ -113,6 +113,7 @@ create table transports(
 
 create table storage(
    id serial,
+   detection_id integer references detections(id),
    contractor_email text references users(email),
    location text,
    date_stored date default null,

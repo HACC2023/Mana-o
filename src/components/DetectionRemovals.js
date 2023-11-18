@@ -24,6 +24,7 @@ const DetectionRemovals = () => {
    const [show2, setShow2] = useState(false);
    const handleClose2 = () => setShow2(false);
    const [detectionRemoval, setDetectionRemoval] = useState({});
+   const [removal, setRemoval] = useState({});
    
    useEffect(() => { getData(); });
    
@@ -96,7 +97,7 @@ const DetectionRemovals = () => {
    /* ********** end detection info dialog variables ***** */
    
    async function handleMoreInfo(event) {
-      console.log(event.target);
+      //console.log(event.target);
       const id_string = event.target.id;
       const tokens = id_string.split("-");
       const id = Number(tokens[1]);
@@ -120,17 +121,38 @@ const DetectionRemovals = () => {
       set_debris_relative_location(results.data.debris_relative_location);
       set_debris_description(results.data.debris_description);
       set_debris_image_filenames(results.data.debris_image_filenames);
-      set_date_detected(results.data.date_detected);
-      
+      set_date_detected(results.data.date_detected);      
    }
-   function handleShow(event) {
-      console.log(event.target);
+   
+   async function getRemovalById(id) {
+      const results = await UserService.getRemovalById(id);
+      setRemoval(results.data);
+      setDateRemoved(results.data.date_removed);
+      setLatitude(results.data.latitude);
+      setLongitude(results.data.longitude);
+      setGeneralLocation(results.data.general_location);
+      setEnvironment(results.data.environment);
+      setVisualEstimate(results.data.visual_estimate);
+      setWildlifeEntanglement(results.data.wildlife_entanglement);
+      setNumberPeopleInvolved(results.data.number_people_involved);
+      setFishermanTimeLost(results.data.fisherman_time_lost);
+      setRemovalTechnique(results.data.removal_technique);
+      setRemovalPhotosExist(results.data.removal_photos_exist);
+   }
+   async function handleShow(event) {
+      //console.log(event.target);
+      clearFields();
       const user = JSON.parse(localStorage.getItem("user"));
       const id_string = event.target.id;
       const tokens = id_string.split("-");
-      console.log("detection id: " + tokens[1]);
+      //console.log("detection id: " + tokens[1]);
       setDetectionID(Number(tokens[1]));
       setContractorEmail(user.email);
+      //console.log("handleShow, detection_id: " + tokens[1]);
+      const detection = await UserService.getDetectionById(Number(tokens[1]));
+      if (detection.data.removal_id !== null) {
+          await getRemovalById(detection.data.removal_id);
+      }
       //console.log(user.email);
       setShow1(true);
    }
@@ -150,7 +172,7 @@ const DetectionRemovals = () => {
       setRemovalTechnique('');
    }
    async function handleSubmit() {
-      await axios.post(API_URL + "removals", {
+      const removal_id = await axios.post(API_URL + "removals", {
          detection_id,
          contractor_email,
          date_removed,

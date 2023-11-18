@@ -162,6 +162,14 @@ function getDetectionById(request, response) {
    })
 }
 
+function getRemovalById(request, response) {
+   const id = request.params.id;
+   let sql = 'select * from removals where id=' + id;
+   connection.query(sql, function(err, results) {
+      response.status(200).json(results.rows[0]);
+   })
+}
+
 function getDetectionRemovals(request, response) {
    let sql = 'select * from detection_removals_view';
    connection.query(sql, function(err, results) {
@@ -387,7 +395,7 @@ function updateUser(request, response) {
 }
 
 module.exports = { createUser, signin, getUsers, getUnapprovedUsers,
-   getDetections, getDetectionById, getReporters, getRemovals,
+   getDetections, getDetectionById, getReporters, getRemovals, getRemovalById,
    approveUsers, checkExist, updatePassword, addDetection, updateDetection, addRemoval,
    getDetectionRemovals, deleteUser, deleteRoles, updateUser};
 

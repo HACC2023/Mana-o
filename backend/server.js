@@ -32,6 +32,7 @@ app.get("/detections", db.getDetections);
 app.get("/detections/:id", db.getDetectionById);
 app.get("/removals", db.getRemovals);
 app.post("/removals", db.addRemoval);
+app.get("/removals/:id", db.getRemovalById);
 app.post("/users/signup", db.createUser);
 app.post("/users/signin", db.signin);
 app.post("/detections", db.addDetection);

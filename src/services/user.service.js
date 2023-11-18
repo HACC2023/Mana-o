@@ -22,6 +22,10 @@ const getDetections = () => {
 function getDetectionById(id){
   return axios.get(API_URL + `detections/${id}`, {headers: authHeader()});
 }
+
+function getRemovalById(id) {
+  return axios.get(API_URL + `removals/${id}`, {headers: authHeader()});
+}
 const getUnapprovedUsers = () => {
   return axios.get(API_URL + "unapprovedusers", {headers: authHeader()});
 }
@@ -50,6 +54,7 @@ const UserService = {
   getUnapprovedUsers,
   updatedApprovedStatus,
   getDetectionRemovals,
+  getRemovalById,
   deleteUser,
   updateUser
 
