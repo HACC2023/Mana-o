@@ -7,3 +7,5 @@
 \i add_detection_removals_view.sql
 \i add_detections.sql
 \i fix_datetime_for_detections.sql
+\i add_detection_storage_view.sql
+

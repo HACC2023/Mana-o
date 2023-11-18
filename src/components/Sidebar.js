@@ -42,6 +42,7 @@ const Sidebar = ({ current_user_type }) => {
 
                         <CDBSidebarMenuItem icon="file" onClick={() => navigate('/dobor_app')}>Dobor Form</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="file" onClick={() => navigate('/detection_removals')}>Sign-up for a Removal</CDBSidebarMenuItem>
+                        <CDBSidebarMenuItem icon="file" onClick={() => navigate('/detection_storage')}>Sign-up for Storage</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="user" onClick={() => navigate('/profile')}>Profile</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="far fa-comment-dots" onClick={() => navigate('/message')}>Message</CDBSidebarMenuItem>
                         <CDBSidebarMenuItem icon="cog"  onClick={handleLogout}>Log out</CDBSidebarMenuItem>

@@ -1,6 +1,7 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
+//const API_URL="https://manaotech.xyz/";
 const API_URL = "http://localhost:8080/";
 
 const getPublicContent = () => {
@@ -22,10 +23,14 @@ const getDetections = () => {
 function getDetectionById(id){
   return axios.get(API_URL + `detections/${id}`, {headers: authHeader()});
 }
-
-function getRemovalById(id) {
-  return axios.get(API_URL + `removals/${id}`, {headers: authHeader()});
+async function getRemovalById(id) {
+    return axios.get(API_URL + `removals/${id}`, {headers: authHeader()});
 }
+
+function getStorageById(id) {
+    return axios.get(API_URL + `storage/${id}`, {headers: authHeader()});
+}
+
 const getUnapprovedUsers = () => {
   return axios.get(API_URL + "unapprovedusers", {headers: authHeader()});
 }
@@ -35,7 +40,9 @@ const updatedApprovedStatus = (approvedUserIds) => {
 const getDetectionRemovals = () => {
   return axios.get(API_URL + "detection_removals", { headers: authHeader()});
 }
-
+const getDetectionStorage = () => {
+    return axios.get(API_URL + "detection_storage", { headers: authHeader()});
+}
 
 const deleteUser = (userId) => {
   return axios.delete(API_URL + `users/${userId}`, { headers: authHeader() });
@@ -55,6 +62,8 @@ const UserService = {
   updatedApprovedStatus,
   getDetectionRemovals,
   getRemovalById,
+  getDetectionStorage,
+  getStorageById,
   deleteUser,
   updateUser
 

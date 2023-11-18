@@ -18,6 +18,7 @@ import Sidebar from './components/Sidebar.js';
 import Navbar from './components/Navbar.js';
 import Detections from './components/Detections';
 import DetectionRemovals from './components/DetectionRemovals';
+import DetectionStorage from './components/DetectionStorage';
 const USER_TYPE = {
     ADMIN: 'admin',
     USER: 'user',
@@ -70,6 +71,7 @@ function App() {
                         <Route path="/dobor_app" element={<UserElement current_user_type={current_user_type}><Dobor /></UserElement>} />
                         <Route path="/dobor" element={<Dobor/>} />
                         <Route path="/detection_removals" element={<UserElement current_user_type={current_user_type}><DetectionRemovals/></UserElement>} />
+                        <Route path="/detection_storage" element={<UserElement current_user_type={current_user_type}><DetectionStorage/></UserElement>} />
                         <Route path="/forgotpassword" element={<ForgotPassword />} />
                         <Route path="*" element={<Navigate to="/" />} />
                     </Routes>

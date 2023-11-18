@@ -167,7 +167,15 @@ function getRemovalById(request, response) {
    let sql = 'select * from removals where id=' + id;
    connection.query(sql, function(err, results) {
       response.status(200).json(results.rows[0]);
-   })
+   });
+}
+
+function getStorageById(request, response) {
+    const id = request.params.id;
+    let sql = 'select * from storage where id=' + id;
+   connection.query(sql, function(err, results) {
+      response.status(200).json(results.rows[0]);
+   });
 }
 
 function getDetectionRemovals(request, response) {
@@ -175,6 +183,13 @@ function getDetectionRemovals(request, response) {
    connection.query(sql, function(err, results) {
       response.status(200).json(results.rows);
    });
+}
+
+function getDetectionStorage(request, response) {
+    let sql = 'select * from detection_storage_view';
+    connection.query(sql, function(err, results) {
+        response.status(200).json(results.rows);
+    });
 }
 
 function getReporters(request, response) {
@@ -311,6 +326,29 @@ function addRemoval(request, response) {
       response.status(201).json({ message: 'Removal added' });
    });
 }
+
+function addStorage(request, response) {
+    const det_id = request.body.detection_id;
+    const email = request.body.contractor_email;
+    const location = request.body.location;
+    const date_wet_mass = request.body.date_wet_mass;
+    const wet_mass = request.body.wet_mass;
+    const date_dry_mass = request.body.date_dry_mass;
+    const dry_mass = request.body.dry_mass;
+    const disposal_method = request.body.disposal_method;
+    let sql = 'select add_storage(' + Number(det_id) + ",'" +
+        email + "','" + location + "','" + date_wet_mass + 
+        "'," + wet_mass + ",'" + date_dry_mass + "'," + 
+        dry_mass + ",'" + disposal_method + "')";
+    console.log(sql);
+    connection.query(sql, function(err, results) {
+        if (err) {
+            console.log(err);
+        }
+        response.status(201).json({ message: 'Storage added' });
+    });
+}
+
 function deleteRoles(userId, callback) {
    const deleteRolesQuery = 'DELETE FROM user_role WHERE user_id = $1';
    connection.query(deleteRolesQuery, [userId], function(err, results) {
@@ -395,7 +433,8 @@ function updateUser(request, response) {
 }
 
 module.exports = { createUser, signin, getUsers, getUnapprovedUsers,
-   getDetections, getDetectionById, getReporters, getRemovals, getRemovalById,
+   getDetections, getDetectionById, getReporters, getRemovals,
    approveUsers, checkExist, updatePassword, addDetection, updateDetection, addRemoval,
-   getDetectionRemovals, deleteUser, deleteRoles, updateUser};
+   getDetectionRemovals, getRemovalById, deleteUser, deleteRoles, updateUser, 
+   getDetectionStorage, getStorageById, addStorage };
 

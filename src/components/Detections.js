@@ -10,6 +10,7 @@ import { Modal } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from "react-validation/build/form";
 import axios from 'axios';
+import {CSVLink} from 'react-csv';
 import './Detections.css';
 
 
@@ -163,6 +164,18 @@ const Detections = () => {
         <div>
             <h2>Detections Table</h2>
             <table id="detections" className="stripe">
+                <CSVLink
+                    data={detectionsData}
+                    filename={'detections.csv'}
+                    className="btn btn-primary"
+                    style={{
+                        marginTop: '10px',
+                        marginBottom: '10px',
+                        marginLeft:'20px'
+                    }}
+                >
+                    Export to CSV
+                </CSVLink>
             <thead>
                 <tr>
                     <th>DOBOR</th>

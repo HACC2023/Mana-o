@@ -1,8 +1,10 @@
 import AuthService from '../services/auth.service';
-import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserService from '../services/user.service';
+import { Chart } from "react-google-charts";
 
+
+import React, {useState, useEffect} from 'react';
 import {
     MDBCol,
     MDBContainer,
@@ -25,22 +27,109 @@ export default function Home() {
     const currentUser = AuthService.getCurrentUser();
     const navigate = useNavigate();
     const [detectionsData, setDetectionsData] = useState([]);
-    const [error, setError] = useState([]);
+    const [error, setError] = useState(null);
+    const [islandTypeCounts, setIslandTypeCounts] = useState(null);
+    const [debrisCounts, setDebrisCounts] = useState();
+
+    const islandTypeCountsToChartData = (islandTypeCounts) => {
+        const chartData = [['Island', 'Debris Type Count']];
+
+        for (const island in islandTypeCounts) {
+            const total = Object.values(islandTypeCounts[island]).reduce((acc, count) => acc + count, 0);
+            chartData.push([island, total]);
+        }
+
+        return chartData;
+    };
+    const getIslandData = (targetIsland) => {
+        const chartData = [['Debris Type', 'Count']];
+
+        if (islandTypeCounts && islandTypeCounts[targetIsland]) {
+            const debrisCounts = islandTypeCounts[targetIsland];
+            Object.entries(debrisCounts).forEach(([debrisType, count]) => {
+                chartData.push([debrisType, count]);
+            });
+        }
+
+        return chartData;
+    };
+    const getAllIslandData = () => {
+        const allIslandCharts = [];
+
+        for (const island in islandTypeCounts) {
+            const islandData = getIslandData(island);
+
+            allIslandCharts.push(
+                <MDBCol>
+                <Chart
+                    key={island}
+                    chartType="ColumnChart"
+                    width="100%"
+                    height="400px"
+                    data={islandData}
+                    options={{ title: `${island} Debris Distribution` }}
+                />
+                </MDBCol>
+            );
+        }
+
+        return allIslandCharts;
+    };
+    const fetchData = async () => {
+        try {
+            const response = await UserService.getDetections();
+            const detectionsData = response.data;
+            setDetectionsData(detectionsData);
+        } catch (err) {
+            console.error('Error fetching detections data:', err);
+            setError(err);
+        }
+    }
+
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await UserService.getDetections();
-                const detectionsData = response.data;
-                setDetectionsData(detectionsData);
-            }
-            catch (err) {
-                console.error('Error fecthing detections data:', err);
-                setError(err);
-            }
-        };
         fetchData();
     }, []);
+
+
+    useEffect(() => {
+        const allDebrisTypes = detectionsData.reduce((types, detection) => {
+            return types.concat(detection.debris_type_detected);
+        }, []);
+
+        const uniqueDebrisTypes = [...new Set(allDebrisTypes)];
+        const uniqueIslands = [...new Set(detectionsData.reduce((acc, detection) => {
+            if (detection.island) {
+                acc.push(detection.island);
+            }
+            return acc;
+        }, []))];
+
+
+        console.log('Unique Debris Types:', uniqueDebrisTypes);
+        console.log('Unique island', uniqueIslands);
+        const islandTypeCounts = {};
+
+        detectionsData.forEach((detection) => {
+            const { island, debris_type_detected } = detection;
+
+            if (island && debris_type_detected) {
+                if (!islandTypeCounts[island]) {
+                    islandTypeCounts[island] = {};
+                }
+
+                if (!islandTypeCounts[island][debris_type_detected]) {
+                    islandTypeCounts[island][debris_type_detected] = 1;
+                } else {
+                    islandTypeCounts[island][debris_type_detected]++;
+                }
+            }
+        });
+
+        console.log(islandTypeCounts);
+        setIslandTypeCounts(islandTypeCounts);
+    }, [detectionsData]);
+
     useEffect(() => {
         const debrisCounts = processData();
         console.log('Debris Counts:', debrisCounts);
@@ -57,8 +146,10 @@ export default function Home() {
             }
         });
         console.log("Debris Counts:", debrisCounts);
+        setDebrisCounts(debrisCounts);
         return debrisCounts;
     }
+
     return (
         <section style={{ backgroundColor: '#eee' }}>
             <MDBContainer className="py-5">
@@ -112,87 +203,59 @@ export default function Home() {
                                         <MDBCardText className="text-muted">{currentUser.email}</MDBCardText>
                                     </MDBCol>
                                 </MDBRow>
+                                <hr />
+                                <MDBRow>
+                                    <MDBCol sm="3">
+                                        <MDBCardText>Phone</MDBCardText>
+                                    </MDBCol>
+                                    <MDBCol sm="9">
+                                        <MDBCardText className="text-muted">{currentUser.phone_number}</MDBCardText>
+                                    </MDBCol>
+                                </MDBRow>
+                                <hr />
+                                <MDBRow>
+                                    <MDBCol sm="3">
+                                        <MDBCardText>Role</MDBCardText>
+                                    </MDBCol>
+                                    <MDBCol sm="9">
+                                        <MDBCardText className="text-muted">{currentUser.roles.includes('admin')?"Admin":"User"}</MDBCardText>
+                                    </MDBCol>
+                                </MDBRow>
 
                             </MDBCardBody>
                         </MDBCard>
-                        
-                        <MDBRow>
-                            <MDBCol md="6">
-                                <MDBCard className="mb-4 mb-md-0">
-                                    <MDBCardBody>
-                                        <MDBCardText className="mb-4"><span className="text-primary font-italic me-1">HAW-1</span> Project Status</MDBCardText>
-                                        <MDBCardText className="mb-1" style={{ fontSize: '.77rem' }}>Detection Report</MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar width={80} valuemin={0} valuemax={100} />
-                                        </MDBProgress>
-
-                                        <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Transport Report</MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar width={72} valuemin={0} valuemax={100} />
-                                        </MDBProgress>
-
-                                        <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Removal Report</MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar width={89} valuemin={0} valuemax={100} />
-                                        </MDBProgress>
-
-                                        <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Storage Report</MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar width={55} valuemin={0} valuemax={100} />
-                                        </MDBProgress>
-
-                                        <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Sorted Report</MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar width={66} valuemin={0} valuemax={100} />
-                                        </MDBProgress>
-
-                                        <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Disposal Report</MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar width={23} valuemin={0} valuemax={100} />
-                                        </MDBProgress>
-                                    </MDBCardBody>
-                                </MDBCard>
-                            </MDBCol>
-
-                            <MDBCol md="6">
-                                <MDBCard className="mb-4 mb-md-0">
-                                    <MDBCardBody>
-                                        <MDBCardText className="mb-4"><span className="text-primary font-italic me-1">OAH-2</span> Project Status</MDBCardText>
-                                        <MDBCardText className="mb-1" style={{ fontSize: '.77rem' }}>Detection Report</MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar width={80} valuemin={0} valuemax={100} />
-                                        </MDBProgress>
-
-                                        <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Transport Report</MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar width={72} valuemin={0} valuemax={100} />
-                                        </MDBProgress>
-
-                                        <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Removal Report</MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar width={89} valuemin={0} valuemax={100} />
-                                        </MDBProgress>
-
-                                        <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Storage Report</MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar width={55} valuemin={0} valuemax={100} />
-                                        </MDBProgress>
-
-                                        <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Sorted Report</MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar width={66} valuemin={0} valuemax={100} />
-                                        </MDBProgress>
-
-                                        <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Disposal Report</MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar width={23} valuemin={0} valuemax={100} />
-                                        </MDBProgress>
-                                    </MDBCardBody>
-                                </MDBCard>
-                            </MDBCol>
-                        </MDBRow>
                     </MDBCol>
                 </MDBRow>
+                <MDBRow style={{ padding: '20px' }}>
+                    <MDBCol>
+                    <Chart
+                        chartType="PieChart"
+                        data={islandTypeCountsToChartData(islandTypeCounts)}
+                        options={{ title: 'Island Debris Distribution' }}
+                        width={'100%'}
+                        height={'380px'}
+                    />
+                    </MDBCol>
+                    <MDBCol>
+                        {debrisCounts && (
+                            <Chart
+                                chartType="BarChart"
+                                data={[
+                                    ['Debris Type', 'Count'],
+                                    ...Object.entries(debrisCounts).map(([type, count]) => [type, count]),
+                                ]}
+                                options={{ title: 'Debris Types' }}
+                                width={'100%'}
+                                height={'400px'}
+                            />
+                        )}
+                    </MDBCol>
+
+                </MDBRow>
+                <MDBRow>
+                    {getAllIslandData()}
+                </MDBRow>
+
             </MDBContainer>
         </section>
     );

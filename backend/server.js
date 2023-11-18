@@ -38,6 +38,9 @@ app.post("/users/signin", db.signin);
 app.post("/detections", db.addDetection);
 app.put("/detections/:id", db.updateDetection);
 app.get("/detection_removals", db.getDetectionRemovals);
+app.get("/detection_storage", db.getDetectionStorage);
+app.post("/storage", db.addStorage);
+app.get("/storage/:id", db.getStorageById);
 
 
 const server = app.listen(8080, () => {

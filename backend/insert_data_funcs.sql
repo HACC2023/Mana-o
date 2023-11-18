@@ -4,6 +4,8 @@ drop function if exists update_detection;
 drop function if exists update_approved_users;
 drop function if exists add_removal;
 drop function if exists update_removal;
+drop function if exists add_storage;
+drop function if exists update_storage;
 
 create or replace function split_string(_text text)
    returns bool as
@@ -119,7 +121,54 @@ create or replace function add_detection(_debris_type text,
    $$
    language 'plpgsql';
 
-   create or replace function add_removal(_detect_id integer, _email text, _date_rem date,
+create or replace function add_storage(_detect_id integer, _email text, 
+    _location text, _date_wet_mass date, _wet_mass numeric, _date_dry_mass date,
+    _dry_mass numeric, _disposal_method text)
+    returns integer as
+    $$
+        declare
+            rec record;
+            _storage_id integer;
+        begin
+            select * into rec from storage where detection_id=_detect_id;
+            if found then
+                _storage_id = rec.id;
+                perform update_storage(_storage_id, _detect_id, _email,
+                    _location, _date_wet_mass, _wet_mass, _date_dry_mass,
+                    _dry_mass, _disposal_method);
+            else
+                execute format('insert into storage (detection_id, '
+                    'contractor_email, location, date_wet_mass_measured, '
+                    'wet_mass, date_dry_mass_measured, dry_mass, '
+                    'disposal_method) values ($1, $2, $3, $4, $5, $6, $7, $8)') 
+                    using _detect_id, _email, _location, _date_wet_mass, 
+                    _wet_mass, _date_dry_mass, _dry_mass, _disposal_method;
+                _storage_id := currval('storage_id_seq');
+                update detections set storage_id=_storage_id where id=_detect_id;
+            end if;
+            return _storage_id;
+        end;
+    $$
+    language 'plpgsql';
+    
+create or replace function update_storage(_storage_id integer, _detect_id integer, 
+    _email text, _location text, _date_wet_mass date, _wet_mass numeric, 
+    _date_dry_mass date, _dry_mass numeric, _disposal_method text)
+    returns boolean as
+    $$
+        begin
+            execute format('update storage set contractor_email=$1, '
+                'location=$2, date_wet_mass_measured=$3, wet_mass=$4, '
+                'date_dry_mass_measured=$5, dry_mass=$6, '
+                'disposal_method=$7 where id=$8') using _email, _location, 
+                _date_wet_mass, _wet_mass, _date_dry_mass, _dry_mass, 
+                _disposal_method, _storage_id;
+            return true;
+        end;
+    $$
+    language 'plpgsql';
+
+create or replace function add_removal(_detect_id integer, _email text, _date_rem date,
     _lat numeric(12,7), _long numeric(12,7), _gen_loc text, _enviro text, 
     _vis_est numeric, _wild_entangle text, _num_people integer,
     _fishtime_lost numeric(4,1),_rem_tech text, _rem_photos_exist text)
@@ -154,7 +203,7 @@ create or replace function add_detection(_debris_type text,
    $$
    language 'plpgsql';
    
-   create or replace function update_removal(_removal_id integer,_detect_id integer, 
+create or replace function update_removal(_removal_id integer,_detect_id integer, 
     _email text, _date_rem date, _lat numeric(12,7), _long numeric(12,7), 
     _gen_loc text, _enviro text, _vis_est numeric, _wild_entangle text, 
     _num_people integer, _fishtime_lost numeric(4,1),_rem_tech text, 
@@ -174,7 +223,7 @@ create or replace function add_detection(_debris_type text,
         end;
     $$
     language 'plpgsql';
-
+   
    create or replace function update_approved_users(_ids integer[])
       returns boolean as
       $$

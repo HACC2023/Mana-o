@@ -13,6 +13,7 @@ drop table if exists user_role cascade;
 create table detections(
    id serial,
    removal_id int unique,
+   storage_id int unique,
    dobor_designation text,
    debris_type_detected text,
    debris_container text,
@@ -137,7 +138,7 @@ create table storage(
    gear_shape text,
    estimated_surface_area numeric(15,2),
    estimated_acres numeric(15,7),
-   
+   disposal_method text,
    primary key (id)
 );
 
