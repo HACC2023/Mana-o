@@ -1,7 +1,8 @@
 import AuthService from '../services/auth.service';
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
+import UserService from '../services/user.service';
 
-import React from 'react';
 import {
     MDBCol,
     MDBContainer,
@@ -23,6 +24,41 @@ import {
 export default function Home() {
     const currentUser = AuthService.getCurrentUser();
     const navigate = useNavigate();
+    const [detectionsData, setDetectionsData] = useState([]);
+    const [error, setError] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await UserService.getDetections();
+                const detectionsData = response.data;
+                setDetectionsData(detectionsData);
+            }
+            catch (err) {
+                console.error('Error fecthing detections data:', err);
+                setError(err);
+            }
+        };
+        fetchData();
+    }, []);
+    useEffect(() => {
+        const debrisCounts = processData();
+        console.log('Debris Counts:', debrisCounts);
+    }, [detectionsData]);
+    const processData = () => {
+        const debrisCounts = {};
+        detectionsData.forEach((detection) => {
+            const debrisType = detection.debris_type_detected;
+            if(!debrisCounts[debrisType]) {
+                debrisCounts[debrisType] = 1;
+            }
+            else {
+                debrisCounts[debrisType] ++;
+            }
+        });
+        console.log("Debris Counts:", debrisCounts);
+        return debrisCounts;
+    }
     return (
         <section style={{ backgroundColor: '#eee' }}>
             <MDBContainer className="py-5">
@@ -79,7 +115,7 @@ export default function Home() {
 
                             </MDBCardBody>
                         </MDBCard>
-
+                        
                         <MDBRow>
                             <MDBCol md="6">
                                 <MDBCard className="mb-4 mb-md-0">
