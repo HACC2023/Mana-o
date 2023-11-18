@@ -185,7 +185,7 @@ const DetectionStorage = () => {
                      <td>{detectionStorage.dobor_designation}</td>
                      <td>{detectionStorage.debris_type_detected}</td>
                      <td>{detectionStorage.island}</td>
-                     <td>{detectionStorage.contractor_email}</td>
+                     <td>{detectionStorage.email}</td>
                      <td>{detectionStorage.date_wet_mass_measured}</td>
                      <td>{detectionStorage.company}</td>
                      <td>
